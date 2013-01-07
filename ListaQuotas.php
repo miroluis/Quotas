@@ -24,8 +24,8 @@ if(!isset($_SESSION['myusername']) ){
 
 	<?php
 	$host = "localhost";
-	$username = "nfcportu_php";
-	$password = "Php2012";
+	$username = "root";
+	$password = "root";
 	mysql_connect($host, $username, $password) or die (mysql_error ());
 
 	// Seleciona o Banco de Dados
@@ -42,14 +42,14 @@ if(!isset($_SESSION['myusername']) ){
 
 	Print "<tr>"; 
  		//<input type="checkbox" id="optionsCheckbox" value="option1">
-	Print "<th><input type='checkbox' id='optionsCheckbox' value='option1'></th>";
+	Print "<th><input type='checkbox' id='optionsCheckboxgeral' value='option1'	onclick='updateCheckboxes();'></th> ";
 	Print "<th>Nome</th> <th>Email</th><th>Secção</th><th>Quota</th><th>Recibo</th><th>Edit</th>";
 	Print "</tr>";
 	// Loop the recordset $rs
 	while($row = mysql_fetch_array($rs)) {
 
 		Print "<tr>"; 
- 		Print "<td><input type='checkbox' id='optionsCheckbox' value='option1'></td>";//".$row['Plan'] . "
+ 		Print "<td><input type='checkbox' id='entryCheckbox' value='option1'></td>";//".$row['Plan'] . "
  		Print "<td>".$row['nome'] . "</td> "; 
  		Print "<td>".$row['email'] . " </td>";
 		Print "<td>".$row['seccao'] ."</td>";//".$row['Plan'] . "
@@ -68,71 +68,29 @@ if(!isset($_SESSION['myusername']) ){
 
 	<a href="/nfcconnect/logout.php">Adiciona elemento</a>
 	<br>
-	<a href="/nfcconnect/logout.php">LogOut</a>
+	<a href="logout.php">LogOut</a>
 
-	  <div>
-	
-	    <h2>Today's date is:</h2>
-	  
-	    <span id="calendar"></span>
-	  
-	    <input type="button" id="myButton" value="Get Date" />
-	
-	
-	  </div>
 
 	<script type="text/javascript">
 	
 	  //Declare your function here
-	
-	  function showDate()
-	
+	  function updateCheckboxes()
 	  {
-	
-	  //the block of code starts here:
-	
-	  //First get all your vars ready
-	
-	  //This is how JavaScript retrieves today's date
-	
-	  var today = new Date();
-	
-	  //get hold of the calendar span element
-	
-	  //where today's date will be inserted
-	
-	  var myCalendar = document.getElementById("calendar");
-	
-	  //get hold of the button:you need this when it comes
-	
-	  //to change its value attribute
-	
-	  var myButton = document.getElementById("myButton");
-	
-	  //insert the date in the span element.
-	
-	  //toDateString() changes the date just retrieved
-	
-	  //into a user-friendly format for display
-	
-	  myCalendar.innerHTML = today.toDateString();
-	
-	  //change the value attribute of the button
-	
-	  //to say something more appropriate once the date is displayed
-	
-	  myButton.value = "Well done!";
+	  	var checkgeral = document.getElementById('optionsCheckboxgeral').checked;
+	  	var inputs = document.getElementsByTagName('input');
 
-	  console.log("clic");
-	
+	  	for(var i=0; i<inputs.length; i++){
+	  		if(inputs[i].getAttribute('type')=='checkbox'){
+	  			var ident = inputs[i].id;
+	  			if(ident.indexOf('entryCheckbox') != -1)
+	  			inputs[i].checked = checkgeral;
+			}
+		} 
 	  }
+
 	
-	  </script>
-
- 
-
-<button class="btn btn-primary" onclick="showDate();">Adiciona mais amigos</button>
-<br>
+	
+	</script>
 
 	<!--http://localhost-->
 </body>

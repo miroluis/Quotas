@@ -1,8 +1,8 @@
 <?php
 
 $host="localhost"; // Host name 
-$username="nfcportu_php"; // Mysql username 
-$password="Php2012"; // Mysql password 
+$username="root"; // Mysql username 
+$password="root"; // Mysql password 
 $db_name="nfcportu_nfcconnect"; // Database name 
 $tbl_name="users"; // Table name 
 
