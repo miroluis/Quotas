@@ -1,0 +1,8 @@
+o meu utilizador de mysql e password sao root.
+naturalmente funciona com o teu, pois o root vem definido por defautl.
+de qualquer forma, se necessario, crio um user de mysql com o mesmo nome do teu.
+
+Convem tambem exportares a tua db para ter um perfect match quando programo algo.
+Criei uma igual a tua com as mesmas tabelas mas devem diferir em alguns pontos.
+
+Abraço ;)
