@@ -40,7 +40,7 @@ if($count==1){
 	session_start();
 	$_SESSION['myusername'] = $username;
 	//$_SESSION['mypassword'] = 'val';
-	header("location:ListaQuotas.php");//teste.php");
+	header("location:index.php");//teste.php");
 }
 else {
 	echo "Wrong Username or Password";

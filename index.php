@@ -44,7 +44,7 @@ if(!isset($_SESSION['myusername']) ){
 	Print "<tr>"; 
  		//<input type="checkbox" id="optionsCheckbox" value="option1">
 	Print "<th><input type='checkbox' id='optionsCheckboxgeral'	onclick='updateCheckboxes();'></th> ";
-	Print "<th>Nome</th> <th>Email</th><th>Secção</th><th>Quota</th><th>Recibo</th>";
+	Print "<th>Nome</th> <th>Email</th><th>Secção</th><th>Quota</th><th>Recibo</th><th>Ordem</th>";
 	Print "</tr>";
 	// Loop the recordset $rs
 	while($row = mysql_fetch_array($rs)) {
@@ -56,7 +56,7 @@ if(!isset($_SESSION['myusername']) ){
 		Print "<td>".$row['seccao'] ."</td>";//".$row['Plan'] . "
 		Print "<td>"." </td>";
 		Print "<td> </td>";//".$row['Remaning_Time'] . "
-		
+		Print "<td><div class='btn-group'><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button></div></td>";
 		Print "</tr>"; 
 	}
 	Print "</table>"; 
@@ -64,27 +64,33 @@ if(!isset($_SESSION['myusername']) ){
 	mysql_close();	
 	?>
 
+    
 
-	<div class="btn-group">
-    	<a class="btn btn-primary" type="button" onclick='insnewRow();' style='margin-left:35px;'>Adicionar elemento</a>
-    	<a class="btn dropdown-toggle" id='actiondropdown' data-toggle="dropdown" href="#">
-    		Action
-    		<span class="caret"></span>
-    	</a>
-    	<ul class="dropdown-menu span3 offset2">
-    		<li>
-    			<a href="#">
-    				Edit
-    			</a>
-    		</li>
-    		<li>
-    			<a href="#">
-    				Remove
-    			</a>
-    		</li>
-    	</ul>
-    </div>
-	<br>
+	<div class="row-fluid">
+		<div class="btn-group span4 offset1">
+	    	<a class="btn btn-primary" type="button" onclick='insnewRow();'>Adicionar elemento</a>
+	    	<a class="btn dropdown-toggle" id='actiondropdown' data-toggle="dropdown" href="#">
+	    		Action
+	    		<span class="caret"></span>
+	    	</a>
+	    	<ul class="dropdown-menu">
+	    		<li>
+	    			<a href="#">
+	    				Edit
+	    			</a>
+	    		</li>
+	    		<li>
+	    			<a href="#">
+	    				Remove
+	    			</a>
+	    		</li>
+	    	</ul>
+	    </div>
+	    <div class"span4 offset4">
+	    	<a class="btn btn-primary" type="button" style='display:show' id='btnUnsavedChanges'>Save changes</a>
+	    </div>
+	</div>
+	<br><br>
 	
 	<div class="centered-content">
     	
@@ -108,7 +114,7 @@ if(!isset($_SESSION['myusername']) ){
 	
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 	<script src="bootstrap/js/bootstrap.js" type="text/javascript"></script>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+	
 	<script type="text/javascript">
 	  var unsavedEntrys = new Array();
 	 	
@@ -124,6 +130,8 @@ if(!isset($_SESSION['myusername']) ){
 	  				inputs[i].checked = checkgeral;
 	  		}
 	  	} 
+
+	  	checkUnsavedChanges();
 	  }
 
 		function sendemail()
@@ -180,7 +188,7 @@ if(!isset($_SESSION['myusername']) ){
 			d.innerHTML="";
 			e.innerHTML="";
 			f.innerHTML="";
-			g.innerHTML="";
+			g.innerHTML="<td><div class='btn-group'><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button></div></td>";
 
 			var rows_tab = document.getElementById('tabela').rows;
 			unsavedEntrys[unsavedEntrys.length] = rows_tab[(rows_tab.length - 1)];
@@ -189,10 +197,11 @@ if(!isset($_SESSION['myusername']) ){
 		
 		function checkUnsavedChanges()
 		{
-			if(unsavedEntrys.length > 0) return true;
-
+			if(unsavedEntrys.length > 0)
+			{
+				return true;
+			}
 			return false;
-
 		}
 
 		function getEmailText()
@@ -207,7 +216,33 @@ if(!isset($_SESSION['myusername']) ){
 			document.getElementById('alertaid').innerHTML = "<button type='button' class='close'>&times;</button>" + text;
 		}
 
-		
+		function moveRow(trigger, up)
+		{
+			var curRow = trigger.parentNode.parentNode.parentElement;
+			var index = curRow.rowIndex;
+			if(--index != 0)
+			{
+			var x=document.getElementById('tabela').insertRow(index);
+			var a=x.insertCell(0);
+			var b=x.insertCell(1);
+			var c=x.insertCell(2);
+			var d=x.insertCell(3);
+			var e=x.insertCell(4);
+			var f=x.insertCell(5);
+			var g=x.insertCell(6);
+			
+			a.innerHTML="<input type='checkbox' id='entryCheckbox' value='option1'>";
+			b.innerHTML="Nome";
+			c.innerHTML="Email";
+			d.innerHTML="";
+			e.innerHTML="";
+			f.innerHTML="";
+			g.innerHTML="";
+			}
+
+			
+		}
+
 		$('.alert .close').live("click", function(e) {
     	$(this).parent().hide();
 });
