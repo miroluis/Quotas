@@ -43,21 +43,20 @@ if(!isset($_SESSION['myusername']) ){
 
 	Print "<tr>"; 
  		//<input type="checkbox" id="optionsCheckbox" value="option1">
-	Print "<th><input type='checkbox' id='optionsCheckboxgeral' value='option1'	onclick='updateCheckboxes();'></th> ";
-	Print "<th>Nome</th> <th>Email</th><th>Secção</th><th>Quota</th><th>Recibo</th><th>Edit</th>";
+	Print "<th><input type='checkbox' id='optionsCheckboxgeral'	onclick='updateCheckboxes();'></th> ";
+	Print "<th>Nome</th> <th>Email</th><th>Secção</th><th>Quota</th><th>Recibo</th>";
 	Print "</tr>";
 	// Loop the recordset $rs
 	while($row = mysql_fetch_array($rs)) {
 
 		Print "<tr>"; 
- 		Print "<td><input type='checkbox' id='entryCheckbox' value='option1'></td>";//".$row['Plan'] . "
+ 		Print "<td><input type='checkbox' id='entryCheckbox'></td>";//".$row['Plan'] . "
  		Print "<td>".$row['nome'] . "</td> "; 
  		Print "<td>".$row['email'] . " </td>";
 		Print "<td>".$row['seccao'] ."</td>";//".$row['Plan'] . "
 		Print "<td>"." </td>";
 		Print "<td> </td>";//".$row['Remaning_Time'] . "
-		$link = "<a href=/nfcconnect/EditaCartao.php?cardid=".$row['id_elementos'].">link</a>";//http://localhost
-		Print "<td> ".$link." </td>";
+		
 		Print "</tr>"; 
 	}
 	Print "</table>"; 
@@ -65,7 +64,26 @@ if(!isset($_SESSION['myusername']) ){
 	mysql_close();	
 	?>
 
-	<button class="btn btn-primary" type="button" onclick='insnewRow();'>Adicionar elemento</button>
+
+	<div class="btn-group">
+    	<a class="btn btn-primary" type="button" onclick='insnewRow();' style='margin-left:35px;'>Adicionar elemento</a>
+    	<a class="btn dropdown-toggle" id='actiondropdown' data-toggle="dropdown" href="#">
+    		Action
+    		<span class="caret"></span>
+    	</a>
+    	<ul class="dropdown-menu span3 offset2">
+    		<li>
+    			<a href="#">
+    				Edit
+    			</a>
+    		</li>
+    		<li>
+    			<a href="#">
+    				Remove
+    			</a>
+    		</li>
+    	</ul>
+    </div>
 	<br>
 	
 	<div class="centered-content">
@@ -76,14 +94,24 @@ if(!isset($_SESSION['myusername']) ){
     	<textarea class="field span10" id="textareaemail" name="textareEmail" rows="5" placeholder="Introduza o texto a enviar..."></textarea>
     	<br>
     	<button class="btn btn-primary" type="button" onclick='sendemail();'>Send</button>
+    	<br><br>
+    	<div class="alert fade in" id="alertaid" style="display:none; width:300px; text-align:center;">
+    		<button type="button" class="close">&times;</button>
+    		Your error message goes here...
+		</div>
 	</div>
 
+    
+ 	<br>
 	<a href="logout.php">LogOut</a>
 
-
-	<script type="text/javascript">
 	
-	  //Declare your function here
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+	<script src="bootstrap/js/bootstrap.js" type="text/javascript"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+	<script type="text/javascript">
+	  var unsavedEntrys = new Array();
+	 	
 	  function updateCheckboxes()
 	  {
 	  	var checkgeral = document.getElementById('optionsCheckboxgeral').checked;
@@ -100,33 +128,39 @@ if(!isset($_SESSION['myusername']) ){
 
 		function sendemail()
 		{
-			var texto = document.getElementById('textareaemail').value;
-
-			var table=document.getElementById("tabela");
-			var tablerows = table.rows;
-			var cells;
-
-			for(var i=1;i<(tablerows.length);i++ )
+			if(!checkUnsavedChanges())
 			{
-				cells = tablerows[i].getElementsByTagName('td');
-				for(var j=0;j<(cells.length);j++ )
+				var texto = document.getElementById('textareaemail').value;
+
+				var table=document.getElementById("tabela");
+				var tablerows = table.rows;
+				var cells;
+
+				for(var i=1;i<(tablerows.length);i++ )
 				{
-					if(cells[j].childNodes[0].id == document.getElementById('entryCheckbox').id)
+					cells = tablerows[i].getElementsByTagName('td');
+					for(var j=0;j<(cells.length);j++ )
 					{
-						if(cells[j].childNodes[0].checked)
+						if(cells[j].childNodes[0].id == document.getElementById('entryCheckbox').id)
 						{
-							var name = cells[1].innerHTML;
-							var email = cells[2].innerHTML;
-							var text = getEmailText();
-							//send e-mail code block here
-							alert("name: " + name + "; email: " + email);
-							break;
+							if(cells[j].childNodes[0].checked)
+							{
+								var name = cells[1].innerHTML;
+								var email = cells[2].innerHTML;
+								var text = getEmailText();
+								//send e-mail code block here
+								alert("name: " + name + "; email: " + email + "; text: " + text);
+								break;
+							}
 						}
+						
 					}
-					
 				}
 			}
-		
+			else
+			{
+				newalert('Existem elementos por guardar!');
+			}
 		}
 
 		function insnewRow()
@@ -147,14 +181,37 @@ if(!isset($_SESSION['myusername']) ){
 			e.innerHTML="";
 			f.innerHTML="";
 			g.innerHTML="";
-			
+
+			var rows_tab = document.getElementById('tabela').rows;
+			unsavedEntrys[unsavedEntrys.length] = rows_tab[(rows_tab.length - 1)];
+			updateCheckboxes();
 		}
 		
+		function checkUnsavedChanges()
+		{
+			if(unsavedEntrys.length > 0) return true;
+
+			return false;
+
+		}
+
 		function getEmailText()
 		{
 			var text = document.getElementById('textareaemail').value;
 			return text;
 		}
+
+		function newalert(text)
+		{
+			$("#alertaid").show();
+			document.getElementById('alertaid').innerHTML = "<button type='button' class='close'>&times;</button>" + text;
+		}
+
+		
+		$('.alert .close').live("click", function(e) {
+    	$(this).parent().hide();
+});
+		
 	</script>
 
 	<!--http://localhost-->
