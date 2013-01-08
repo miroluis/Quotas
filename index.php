@@ -220,26 +220,48 @@ if(!isset($_SESSION['myusername']) ){
 		{
 			var curRow = trigger.parentNode.parentNode.parentElement;
 			var index = curRow.rowIndex;
-			if(--index != 0)
+
+			var x = null;
+
+			if(up)
 			{
-			var x=document.getElementById('tabela').insertRow(index);
-			var a=x.insertCell(0);
-			var b=x.insertCell(1);
-			var c=x.insertCell(2);
-			var d=x.insertCell(3);
-			var e=x.insertCell(4);
-			var f=x.insertCell(5);
-			var g=x.insertCell(6);
-			
-			a.innerHTML="<input type='checkbox' id='entryCheckbox' value='option1'>";
-			b.innerHTML="Nome";
-			c.innerHTML="Email";
-			d.innerHTML="";
-			e.innerHTML="";
-			f.innerHTML="";
-			g.innerHTML="";
+				if(--index != 0)
+				{
+					x=document.getElementById('tabela').insertRow(index);
+				
+				}
+			}
+			else
+			{
+				++index;
+				if(++index != curRow.parentElement.length)
+				{
+					x=document.getElementById('tabela').insertRow(index);
+				
+				}
 			}
 
+			if(x != null)
+			{
+				var a=x.insertCell(0);
+				var b=x.insertCell(1);
+				var c=x.insertCell(2);
+				var d=x.insertCell(3);
+				var e=x.insertCell(4);
+				var f=x.insertCell(5);
+				var g=x.insertCell(6);
+				
+				var cells_row = curRow.cells;
+				
+				a.innerHTML=cells_row[0].innerHTML;
+				b.innerHTML=cells_row[1].innerHTML;
+				c.innerHTML=cells_row[2].innerHTML;
+				d.innerHTML=cells_row[3].innerHTML;
+				e.innerHTML=cells_row[4].innerHTML;
+				f.innerHTML=cells_row[5].innerHTML;
+				g.innerHTML=cells_row[6].innerHTML;
+				curRow.parentElement.deleteRow(curRow.rowIndex);
+			}
 			
 		}
 
