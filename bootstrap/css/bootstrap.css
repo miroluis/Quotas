@@ -196,6 +196,13 @@ textarea {
   background-color: transparent;
   border: 0;
 }
+
+.centered-content{ 
+  text-align:center 
+
+  !important;
+}
+
 .input-block-level {
   display: block;
   width: 100%;

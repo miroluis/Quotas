@@ -8,6 +8,7 @@ if(!isset($_SESSION['myusername']) ){
 	header("location:main_login.php");
 }
 ?>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -64,10 +65,19 @@ if(!isset($_SESSION['myusername']) ){
 	mysql_close();	
 	?>
 
-
-
-	<a href="/nfcconnect/logout.php">Adiciona elemento</a>
+	<button class="btn btn-primary" type="button" onclick='insnewRow();'>Adicionar elemento</button>
 	<br>
+	
+	<div class="centered-content">
+    	
+      	Escreva aqui o e-mail a ser enviado:
+    	<br>
+
+    	<textarea class="field span10" id="textareaemail" name="textareEmail" rows="5" placeholder="Introduza o texto a enviar..."></textarea>
+    	<br>
+    	<button class="btn btn-primary" type="button" onclick='sendemail();'>Send</button>
+	</div>
+
 	<a href="logout.php">LogOut</a>
 
 
@@ -83,13 +93,68 @@ if(!isset($_SESSION['myusername']) ){
 	  		if(inputs[i].getAttribute('type')=='checkbox'){
 	  			var ident = inputs[i].id;
 	  			if(ident.indexOf('entryCheckbox') != -1)
-	  			inputs[i].checked = checkgeral;
-			}
-		} 
+	  				inputs[i].checked = checkgeral;
+	  		}
+	  	} 
 	  }
 
-	
-	
+		function sendemail()
+		{
+			var texto = document.getElementById('textareaemail').value;
+
+			var table=document.getElementById("tabela");
+			var tablerows = table.rows;
+			var cells;
+
+			for(var i=1;i<(tablerows.length);i++ )
+			{
+				cells = tablerows[i].getElementsByTagName('td');
+				for(var j=0;j<(cells.length);j++ )
+				{
+					if(cells[j].childNodes[0].id == document.getElementById('entryCheckbox').id)
+					{
+						if(cells[j].childNodes[0].checked)
+						{
+							var name = cells[1].innerHTML;
+							var email = cells[2].innerHTML;
+							var text = getEmailText();
+							//send e-mail code block here
+							alert("name: " + name + "; email: " + email);
+							break;
+						}
+					}
+					
+				}
+			}
+		
+		}
+
+		function insnewRow()
+		{
+			var x=document.getElementById('tabela').insertRow(document.getElementById('tabela').rows.length);
+			var a=x.insertCell(0);
+			var b=x.insertCell(1);
+			var c=x.insertCell(2);
+			var d=x.insertCell(3);
+			var e=x.insertCell(4);
+			var f=x.insertCell(5);
+			var g=x.insertCell(6);
+			
+			a.innerHTML="<input type='checkbox' id='entryCheckbox' value='option1'>";
+			b.innerHTML="Nome";
+			c.innerHTML="Email";
+			d.innerHTML="";
+			e.innerHTML="";
+			f.innerHTML="";
+			g.innerHTML="";
+			
+		}
+		
+		function getEmailText()
+		{
+			var text = document.getElementById('textareaemail').value;
+			return text;
+		}
 	</script>
 
 	<!--http://localhost-->
