@@ -87,7 +87,7 @@ if(!isset($_SESSION['myusername']) ){
 	    	</ul>
 	    </div>
 	    <div class"span4 offset4">
-	    	<a class="btn btn-primary" type="button" style='display:show' id='btnUnsavedChanges'>Save changes</a>
+	    	<a class="btn btn-primary" type="button" onclick='pulltodb();' style='display:show' id='btnUnsavedChanges'>Save changes</a>
 	    </div>
 	</div>
 	<br><br>
@@ -116,7 +116,6 @@ if(!isset($_SESSION['myusername']) ){
 	<script src="bootstrap/js/bootstrap.js" type="text/javascript"></script>
 	
 	<script type="text/javascript">
-	  var unsavedEntrys = new Array();
 	 	
 	  function updateCheckboxes()
 	  {
@@ -131,13 +130,11 @@ if(!isset($_SESSION['myusername']) ){
 	  		}
 	  	} 
 
-	  	checkUnsavedChanges();
+	  	
 	  }
 
 		function sendemail()
 		{
-			if(!checkUnsavedChanges())
-			{
 				var texto = document.getElementById('textareaemail').value;
 
 				var table=document.getElementById("tabela");
@@ -164,11 +161,6 @@ if(!isset($_SESSION['myusername']) ){
 						
 					}
 				}
-			}
-			else
-			{
-				newalert('Existem elementos por guardar!');
-			}
 		}
 
 		function insnewRow()
@@ -183,15 +175,13 @@ if(!isset($_SESSION['myusername']) ){
 			var g=x.insertCell(6);
 			
 			a.innerHTML="<input type='checkbox' id='entryCheckbox' value='option1'>";
-			b.innerHTML="Nome";
-			c.innerHTML="Email";
-			d.innerHTML="";
-			e.innerHTML="";
-			f.innerHTML="";
-			g.innerHTML="<td><div class='btn-group'><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button></div></td>";
+			b.innerHTML="<input type='text' id='txtNome' style='width:100px' placeholder='Nome...'>";
+			c.innerHTML="<input type='text' id='txtEmail' style='width:100px' placeholder='Email...'>";
+			d.innerHTML="<input type='text' id='txtSeccao' style='width:100px' placeholder='Secção...'>";
+			e.innerHTML="<input type='text' id='txtQuota' style='width:100px' placeholder='Quota...'>";
+			f.innerHTML="<input type='text' id='txtRecibo' style='width:100px' placeholder='Recibo...'>";
+			g.innerHTML="<td><div class='btn-group'><button class='btn btn-mini' id='teste1' onclick='fixontable(this);'><i class='icon-share-alt'></i></button><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button></div></td>";
 
-			var rows_tab = document.getElementById('tabela').rows;
-			unsavedEntrys[unsavedEntrys.length] = rows_tab[(rows_tab.length - 1)];
 			updateCheckboxes();
 		}
 		
@@ -216,6 +206,35 @@ if(!isset($_SESSION['myusername']) ){
 			document.getElementById('alertaid').innerHTML = "<button type='button' class='close'>&times;</button>" + text;
 		}
 
+
+		
+
+		function fixontable(ele)
+		{
+			var elem = ele;
+			var currow = elem.parentNode.parentNode.parentNode;
+			var cells_row = currow.cells;
+
+			var a = document.getElementById('txtNome').value;
+			var b = document.getElementById('txtEmail').value;
+			var c = document.getElementById('txtSeccao').value;
+			var d = document.getElementById('txtQuota').value;
+			var e = document.getElementById('txtRecibo').value;
+			
+			cells_row[1].innerHTML = a;
+			cells_row[2].innerHTML = b;
+			cells_row[3].innerHTML = c;
+			cells_row[4].innerHTML = d;
+			cells_row[5].innerHTML = e;
+			cells_row[6].innerHTML = "<div class='btn-group'><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button></div>";
+		}
+
+		function pulltodb()
+		{
+
+
+		}
+
 		function moveRow(trigger, up)
 		{
 			var curRow = trigger.parentNode.parentNode.parentElement;
@@ -233,9 +252,10 @@ if(!isset($_SESSION['myusername']) ){
 			}
 			else
 			{
-				++index;
-				if(++index != curRow.parentElement.length)
+				if((++index) != (curRow.parentElement.length - 1))
 				{
+					alert(index);
+					alert(curRow.parentElement.length);
 					x=document.getElementById('tabela').insertRow(index);
 				
 				}
