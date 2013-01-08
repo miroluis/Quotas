@@ -8,6 +8,7 @@
 	mysql_select_db("nfcportu_nfcconnect") or die(mysql_error());
 
 	$nome=$_POST['nome']; 
+	echo $nome;
 	$email=$_POST['email']; 
 	$seccao=$_POST['seccao']; 
 	$quota=$_POST['quota']; 

@@ -21,8 +21,8 @@ if(!isset($_SESSION['myusername']) ){
 
 </head>
 <body class="preview" data-spy="scroll" data-target=".subnav" data-offset="80">
-	<h1>Quotas do Ano 2011-2012</h1>
-
+	<h1 style='text-align:center'>Quotas do Ano 2011-2012</h1>
+	<br><br>
 	<?php
 	$host = "localhost";
 	$username = "root";
@@ -38,7 +38,7 @@ if(!isset($_SESSION['myusername']) ){
 	$strSQL = $strSQL . " FROM elementos ";
 	$rs = mysql_query($strSQL);
 	
-	//Print "<table border cellpadding=3>"; 
+	Print "<div class='container'>"; 
 	Print "<table id = 'tabela' class='table table-bordered table-striped table-hover'>";
 
 	Print "<tr>"; 
@@ -66,29 +66,31 @@ if(!isset($_SESSION['myusername']) ){
 
     
 
-	<div class="row-fluid">
-		<div class="btn-group span4 offset1">
-	    	<a class="btn btn-primary" type="button" onclick='insnewRow();'>Adicionar elemento</a>
-	    	<a class="btn dropdown-toggle" id='actiondropdown' data-toggle="dropdown" href="#">
-	    		Action
-	    		<span class="caret"></span>
-	    	</a>
-	    	<ul class="dropdown-menu">
-	    		<li>
-	    			<a href="#">
-	    				Edit
-	    			</a>
-	    		</li>
-	    		<li>
-	    			<a href="#">
-	    				Remove
-	    			</a>
-	    		</li>
-	    	</ul>
-	    </div>
-	    <div class"span4 offset4">
-	    	<a class="btn btn-primary" type="button" onclick='pulltodb();' style='display:show' id='btnUnsavedChanges'>Save changes</a>
-	    </div>
+	
+		<div class="btn-group span5">
+			<a class="btn btn-primary" type="button" onclick='insnewRow();'>Adicionar elemento</a>
+			<a class="btn dropdown-toggle" id='actiondropdown' data-toggle="dropdown" href="#">
+				Acção
+				<span class="caret"></span>
+			</a>
+			<ul class="dropdown-menu">
+				<li>
+					<a href="#">
+						Editar elemento(s)
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						Remover elemento(s)
+					</a>
+				</li>
+			</ul>
+		</div>
+
+		<div class"span4 offset4">
+			<a class="btn btn-primary" type="button" onclick='pulltodb();' style='display:show' id='btnUnsavedChanges'>Save changes</a>
+		</div>
+		
 	</div>
 	<br><br>
 	
@@ -111,12 +113,14 @@ if(!isset($_SESSION['myusername']) ){
  	<br>
 	<a href="logout.php">LogOut</a>
 
+
 	
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-	<script src="bootstrap/js/bootstrap.js" type="text/javascript"></script>
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
 	
 	<script type="text/javascript">
-	 	
+	 	var novosElementos = new Array();
+
 	  function updateCheckboxes()
 	  {
 	  	var checkgeral = document.getElementById('optionsCheckboxgeral').checked;
@@ -143,23 +147,22 @@ if(!isset($_SESSION['myusername']) ){
 
 				for(var i=1;i<(tablerows.length);i++ )
 				{
-					cells = tablerows[i].getElementsByTagName('td');
-					for(var j=0;j<(cells.length);j++ )
+					cells = tablerows[i].cells;
+					
+					if(cells[0].childNodes[0].id == document.getElementById('entryCheckbox').id)
 					{
-						if(cells[j].childNodes[0].id == document.getElementById('entryCheckbox').id)
+						if(cells[0].childNodes[0].checked)
 						{
-							if(cells[j].childNodes[0].checked)
-							{
-								var name = cells[1].innerHTML;
-								var email = cells[2].innerHTML;
-								var text = getEmailText();
-								//send e-mail code block here
-								alert("name: " + name + "; email: " + email + "; text: " + text);
-								break;
-							}
+							var name = cells[1].innerHTML;
+							var email = cells[2].innerHTML;
+							var text = getEmailText();
+							//send e-mail code block here
+							alert("name: " + name + "; email: " + email + "; text: " + text);
+							break;
 						}
-						
 					}
+				
+					
 				}
 		}
 
@@ -174,15 +177,16 @@ if(!isset($_SESSION['myusername']) ){
 			var f=x.insertCell(5);
 			var g=x.insertCell(6);
 			
-			a.innerHTML="<input type='checkbox' id='entryCheckbox' value='option1'>";
-			b.innerHTML="<input type='text' id='txtNome' style='width:100px' placeholder='Nome...'>";
-			c.innerHTML="<input type='text' id='txtEmail' style='width:100px' placeholder='Email...'>";
-			d.innerHTML="<input type='text' id='txtSeccao' style='width:100px' placeholder='Secção...'>";
-			e.innerHTML="<input type='text' id='txtQuota' style='width:100px' placeholder='Quota...'>";
-			f.innerHTML="<input type='text' id='txtRecibo' style='width:100px' placeholder='Recibo...'>";
-			g.innerHTML="<td><div class='btn-group'><button class='btn btn-mini' id='teste1' onclick='fixontable(this);'><i class='icon-share-alt'></i></button><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button></div></td>";
+			a.innerHTML="<td><input type='checkbox' id='entryCheckbox' value='option1'></td>";
+			b.innerHTML="<td><input type='text' id='txtNome' style='width:100px' placeholder='Nome...'></td>";
+			c.innerHTML="<td><input type='text' id='txtEmail' style='width:100px' placeholder='Email...'></td>";
+			d.innerHTML="<td><select id='comboSeccao'><option>Lobitos</option><option>Exploradores</option><option>Pioneiros</option><option>Caminheiros</option><option>Chefes ?</option></select></td>";
+			e.innerHTML="<td><input type='text' id='txtQuota' style='width:100px' placeholder='Quota...'></td>";
+			f.innerHTML="<td><input type='text' id='txtRecibo' style='width:100px' placeholder='Recibo...'></td>";
+			g.innerHTML="<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='teste1' onclick='fixontable(this);'><i class='icon-thumbs-up'></i></button><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button></div></td>";
 
 			updateCheckboxes();
+			novosElementos[novosElementos.length] = x;
 		}
 		
 		function checkUnsavedChanges()
@@ -207,7 +211,12 @@ if(!isset($_SESSION['myusername']) ){
 		}
 
 
-		
+		function pulltodb()
+		{
+				var name = "How are you?";
+				$.post();
+			
+		}
 
 		function fixontable(ele)
 		{
@@ -215,11 +224,12 @@ if(!isset($_SESSION['myusername']) ){
 			var currow = elem.parentNode.parentNode.parentNode;
 			var cells_row = currow.cells;
 
-			var a = document.getElementById('txtNome').value;
-			var b = document.getElementById('txtEmail').value;
-			var c = document.getElementById('txtSeccao').value;
-			var d = document.getElementById('txtQuota').value;
-			var e = document.getElementById('txtRecibo').value;
+			var curcells = currow.getElementsByTagName('td');
+			var a = curcells[1].childNodes[0].value;
+			var b = curcells[2].childNodes[0].value;
+			var c = curcells[3].childNodes[0].value;
+			var d = curcells[4].childNodes[0].value;
+			var e = curcells[5].childNodes[0].value;
 			
 			cells_row[1].innerHTML = a;
 			cells_row[2].innerHTML = b;
@@ -254,9 +264,8 @@ if(!isset($_SESSION['myusername']) ){
 			{
 				if((++index) != (curRow.parentElement.length - 1))
 				{
-					alert(index);
-					alert(curRow.parentElement.length);
-					x=document.getElementById('tabela').insertRow(index);
+					
+					x=document.getElementById('tabela').insertRow(++index);
 				
 				}
 			}
