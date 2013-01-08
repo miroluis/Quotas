@@ -44,7 +44,7 @@ if(!isset($_SESSION['myusername']) ){
 	Print "<tr>"; 
  		//<input type="checkbox" id="optionsCheckbox" value="option1">
 	Print "<th><input type='checkbox' id='optionsCheckboxgeral'	onclick='updateCheckboxes();'></th> ";
-	Print "<th>Nome</th> <th>Email</th><th>Secção</th><th>Quota</th><th>Recibo</th><th>Ordem</th>";
+	Print "<th>Nome</th> <th>Email</th><th>Secção</th><th>Quota</th><th>Recibo</th><th>Acção</th>";
 	Print "</tr>";
 	// Loop the recordset $rs
 	while($row = mysql_fetch_array($rs)) {
@@ -54,9 +54,9 @@ if(!isset($_SESSION['myusername']) ){
  		Print "<td>".$row['nome'] . "</td> "; 
  		Print "<td>".$row['email'] . " </td>";
 		Print "<td>".$row['seccao'] ."</td>";//".$row['Plan'] . "
-		Print "<td>"." </td>";
-		Print "<td> </td>";//".$row['Remaning_Time'] . "
-		Print "<td><div class='btn-group'><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button></div></td>";
+		Print "<td>".$row['quota']. " </td>";
+		Print "<td>" .$row['recibo']. "</td>";//".$row['Remaning_Time'] . "
+		Print "<td><div class='btn-group'><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-warning' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
 		Print "</tr>"; 
 	}
 	Print "</table>"; 
@@ -67,29 +67,10 @@ if(!isset($_SESSION['myusername']) ){
     
 
 	
-		<div class="btn-group span5">
+		<!--<div class="btn-group span5">-->
 			<a class="btn btn-primary" type="button" onclick='insnewRow();'>Adicionar elemento</a>
-			<a class="btn dropdown-toggle" id='actiondropdown' data-toggle="dropdown" href="#">
-				Acção
-				<span class="caret"></span>
-			</a>
-			<ul class="dropdown-menu">
-				<li>
-					<a href="#">
-						Editar elemento(s)
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						Remover elemento(s)
-					</a>
-				</li>
-			</ul>
-		</div>
-
-		<div class"span4 offset4">
-			<a class="btn btn-primary" type="button" onclick='pulltodb();' style='display:show' id='btnUnsavedChanges'>Save changes</a>
-		</div>
+			<a class="btn btn-primary inline" type="button" onclick='saveTable();'>Guardar nova ordem</a>
+		<!--</div>-->
 		
 	</div>
 	<br><br>
@@ -98,11 +79,12 @@ if(!isset($_SESSION['myusername']) ){
     	
       	Escreva aqui o e-mail a ser enviado:
     	<br>
-
-    	<textarea class="field span10" id="textareaemail" name="textareEmail" rows="5" placeholder="Introduza o texto a enviar..."></textarea>
-    	<br>
-    	<button class="btn btn-primary" type="button" onclick='sendemail();'>Send</button>
-    	<br><br>
+    	<form action='sendemail.php' method='POST'>
+	    	<textarea class="field span10" id="textareaemail" name="textareEmail" rows="5" placeholder="Introduza o texto a enviar..."></textarea>
+	    	<br>
+	    	<button class="btn btn-primary" type="submit">Send</button>
+	    	<br><br>
+    	</form>
     	<div class="alert fade in" id="alertaid" style="display:none; width:300px; text-align:center;">
     		<button type="button" class="close">&times;</button>
     		Your error message goes here...
@@ -119,7 +101,6 @@ if(!isset($_SESSION['myusername']) ){
 	<script src="bootstrap/js/bootstrap.min.js"></script>
 	
 	<script type="text/javascript">
-	 	var novosElementos = new Array();
 
 	  function updateCheckboxes()
 	  {
@@ -183,39 +164,16 @@ if(!isset($_SESSION['myusername']) ){
 			d.innerHTML="<td><select id='comboSeccao'><option>Lobitos</option><option>Exploradores</option><option>Pioneiros</option><option>Caminheiros</option><option>Chefes ?</option></select></td>";
 			e.innerHTML="<td><input type='text' id='txtQuota' style='width:100px' placeholder='Quota...'></td>";
 			f.innerHTML="<td><input type='text' id='txtRecibo' style='width:100px' placeholder='Recibo...'></td>";
-			g.innerHTML="<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='teste1' onclick='fixontable(this);'><i class='icon-thumbs-up'></i></button><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button></div></td>";
+			g.innerHTML="<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='teste1' onclick='fixontable(this);'><i class='icon-ok'></i></button><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-warning' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
 
 			updateCheckboxes();
-			novosElementos[novosElementos.length] = x;
 		}
 		
-		function checkUnsavedChanges()
-		{
-			if(unsavedEntrys.length > 0)
-			{
-				return true;
-			}
-			return false;
-		}
 
 		function getEmailText()
 		{
 			var text = document.getElementById('textareaemail').value;
 			return text;
-		}
-
-		function newalert(text)
-		{
-			$("#alertaid").show();
-			document.getElementById('alertaid').innerHTML = "<button type='button' class='close'>&times;</button>" + text;
-		}
-
-
-		function pulltodb()
-		{
-				var name = "How are you?";
-				$.post();
-			
 		}
 
 		function fixontable(ele)
@@ -230,19 +188,52 @@ if(!isset($_SESSION['myusername']) ){
 			var c = curcells[3].childNodes[0].value;
 			var d = curcells[4].childNodes[0].value;
 			var e = curcells[5].childNodes[0].value;
-			
+
 			cells_row[1].innerHTML = a;
 			cells_row[2].innerHTML = b;
 			cells_row[3].innerHTML = c;
 			cells_row[4].innerHTML = d;
 			cells_row[5].innerHTML = e;
-			cells_row[6].innerHTML = "<div class='btn-group'><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button></div>";
+			cells_row[6].innerHTML = "<div class='btn-group'><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-warning' onclick='removeRow(this);'><i class='icon-remove'></i></button></div>";
+
+			var query = "INSERT into elementos (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
+				$.post("managedb.php", { sql_query : query},
+					function(data) {
+					alert("Insert return: " + data);
+					});
 		}
 
-		function pulltodb()
+		function saveTable()
 		{
+			
+			var querys = "TRUNCATE TABLE elementos;";
+			$.post("managedb.php", { sql_query : querys},
+					function(data) {
+					alert("Truncate return: " + data);
+					var tablerows = document.getElementById('tabela').rows;
 
+					for(var i=1;i<tablerows.length;i++)
+					{
+						var row = tablerows[i];
+						var cells = row.getElementsByTagName('td');
+						var a = cells[1].innerHTML;
+						var b = cells[2].innerHTML;
+						var c = cells[3].innerHTML;
+						var d = cells[4].innerHTML;
+						var e = cells[5].innerHTML;
+						
 
+						var query = "INSERT into elementos (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
+						$.post("managedb.php", { sql_query : query},
+							function(data) {
+								alert("Insert return: " + data);
+							});
+					}
+					});
+
+			
+
+			
 		}
 
 		function moveRow(trigger, up)
@@ -290,13 +281,30 @@ if(!isset($_SESSION['myusername']) ){
 				f.innerHTML=cells_row[5].innerHTML;
 				g.innerHTML=cells_row[6].innerHTML;
 				curRow.parentElement.deleteRow(curRow.rowIndex);
+
+				
 			}
 			
 		}
 
-		$('.alert .close').live("click", function(e) {
-    	$(this).parent().hide();
-});
+		function removeRow(ele)
+		{
+			var row = ele.parentNode.parentNode.parentNode;
+			var cells = row.getElementsByTagName('td');
+			var nome = cells[1].innerHTML;
+			var email = cells[2].innerHTML;
+			var table =document.getElementById('tabela');
+			
+			table.deleteRow(row.rowIndex);
+
+			var query = "DELETE FROM elementos WHERE nome = '"+nome+"' AND email = '"+email+"';";
+				$.post("managedb.php", { sql_query : query},
+					function(data) {
+					alert("Delete row return: " + data);
+					window.location.reload();
+					});
+			
+		}
 		
 	</script>
 
