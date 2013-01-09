@@ -16,6 +16,8 @@ if(!isset($_SESSION['myusername']) ){
 	<title>Quotas</title>
 
 	<link href="bootstrap/css/bootstrap.css" rel="stylesheet">  
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
 
 	<script language="JavaScript"></script> 
 
@@ -23,6 +25,16 @@ if(!isset($_SESSION['myusername']) ){
 <body class="preview" data-spy="scroll" data-target=".subnav" data-offset="80">
 	<h1 style='text-align:center'>Quotas do Ano 2011-2012</h1>
 	<br><br>
+
+	<div class='container' >
+		<ul class="nav nav-tabs">
+			<li class="active">
+				<a href="#">Home</a>
+			</li>
+			<li><a href="#">...</a></li>
+			<li><a href="#">...</a></li>
+		</ul>
+
 	<?php
 	$host = "localhost";
 	$username = "root";
@@ -38,7 +50,7 @@ if(!isset($_SESSION['myusername']) ){
 	$strSQL = $strSQL . " FROM elementos ";
 	$rs = mysql_query($strSQL);
 
-    Print "<div class='container' >";
+    //Print "<div class='container' >";
 
 	Print "<table id = 'tabela' class='table table-bordered table-striped table-hover'>";
 
@@ -66,6 +78,7 @@ if(!isset($_SESSION['myusername']) ){
 	?>
 
     
+
 
 	
 		<!--<div class="btn-group span5">-->
@@ -99,8 +112,7 @@ if(!isset($_SESSION['myusername']) ){
 
 
 	
-	<script src="http://code.jquery.com/jquery-latest.js"></script>
-	<script src="bootstrap/js/bootstrap.min.js"></script>
+
 	
 	<script type="text/javascript">
 
