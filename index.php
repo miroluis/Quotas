@@ -30,21 +30,15 @@ if(!isset($_SESSION['myusername']) ){
 
 	<div class='container' >
 		<ul class="nav nav-tabs">
-			<li class="active">
-				<a href="#">Home</a>
-			</li>
-			<li><a href="#">...</a></li>
-			<li><a href="#">...</a></li>
-		</ul>
+		
 
 	<?php
-	$host = "localhost";
-	$username = "root";
-	$password = "root";
-	mysql_connect($host, $username, $password) or die (mysql_error ());
 
-	// Seleciona o Banco de Dados
-	mysql_select_db("nfcportu_nfcconnect") or die(mysql_error());
+		include('DBModel.php');
+
+		LigaBD();
+
+		ProcuraAnos();
 
 	// Get data from the database depending on the value of the id in the URL
 	//$strSQL = "SELECT * FROM entradas";
