@@ -1,4 +1,5 @@
 <?php
+
 function LigaBD() {
 
 	$host = "localhost";
@@ -12,23 +13,57 @@ function LigaBD() {
 
 function ProcuraAnos() {
 		//Procura Anos Na Tabela Quotas
-	$strSQL = "SELECT * ";
-	$strSQL = $strSQL . " FROM quotas ";
+	$strSQL = "SHOW tables;";
 	$rs = mysql_query($strSQL);
 
 	while($row = mysql_fetch_array($rs)) {
 
+		if($row[0] != "users")
+		{
 		Print "<li class='active'>"; 
-		Print "<a href='#'>".$row['ano'] . "</a> </li>";  		
+		Print "<a id='teste' onclick='changeYear(this);'>".$row[0] . "</a> </li>";  		
+	}
+	}
+	Print "</ul>";
 	}
 
 
-		//<li class="active">
-		//		<a href="#">Home</a>
-		//	</li>
-		//	<li><a href="#">...</a></li>
-		//	<li><a href="#">...</a></li>
-	Print "</ul>";
-}
+	function getAno()
+	{
+		
+		$ano = mysql_query("SELECT * FROM ano_activo;");
+		$ano_f = mysql_fetch_array($ano);
+		$strSQL = "SELECT * FROM ".$ano_f[0]." ;";
+		$rs = mysql_query($strSQL);
 
+		Print "<table id = 'tabela' class='table table-bordered table-striped table-hover'>";
+
+		Print "<tr>"; 
+	 		//<input type="checkbox" id="optionsCheckbox" value="option1">
+		Print "<th><div class='btn-group'><button class='btn btn-info' onclick='checkUpdate(0);'>Selecionar</button><button class='btn btn-info dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button><ul class='dropdown-menu'><li><a onclick='checkUpdate(1);'>Devedores</a></li><li><a onclick='checkUpdate(2);'>Com recibo</a></li></ul></div></th> ";
+		Print "<th>Nome</th> <th>Email</th><th>Secção</th><th>Quota</th><th>Recibo</th><th>Acção</th>";
+		Print "</tr>";
+		// Loop the recordset $rs
+		while($row = mysql_fetch_array($rs)) {
+
+			Print "<tr>"; 
+	 		Print "<td><input type='checkbox' id='entryCheckbox'></td>";//".$row['Plan'] . "
+	 		Print "<td>".$row['nome'] . "</td> "; 
+	 		Print "<td>".$row['email'] . " </td>";
+			Print "<td>".$row['seccao'] ."</td>";//".$row['Plan'] . "
+			Print "<td>".$row['quota']. " </td>";
+			Print "<td>" .$row['recibo']. "</td>";//".$row['Remaning_Time'] . "
+			Print "<td><div class='btn-group'><button class='btn btn-mini' id='editBtn' onclick='editRow(this);'><i class='icon-pencil'></i></button><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-warning' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
+			Print "</tr>"; 
+		}
+		Print "</table>"; 
+		// Close the database connection
+
+			
+	}
+
+	function closedb()
+	{
+		mysql_close();
+	}
 ?>

@@ -33,44 +33,12 @@ if(!isset($_SESSION['myusername']) ){
 		
 
 	<?php
-
+		
 		include('DBModel.php');
-
 		LigaBD();
-
 		ProcuraAnos();
-
-	// Get data from the database depending on the value of the id in the URL
-	//$strSQL = "SELECT * FROM entradas";
-	$strSQL = "SELECT * ";
-	$strSQL = $strSQL . " FROM elementos ";
-	$rs = mysql_query($strSQL);
-
-    //Print "<div class='container' >";
-
-	Print "<table id = 'tabela' class='table table-bordered table-striped table-hover'>";
-
-	Print "<tr>"; 
- 		//<input type="checkbox" id="optionsCheckbox" value="option1">
-	Print "<th><div class='btn-group'><button class='btn btn-info' onclick='checkUpdate(0);'>Selecionar</button><button class='btn btn-info dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button><ul class='dropdown-menu'><li><a onclick='checkUpdate(1);'>Devedores</a></li><li><a onclick='checkUpdate(2);'>Com recibo</a></li></ul></div></th> ";
-	Print "<th>Nome</th> <th>Email</th><th>Secção</th><th>Quota</th><th>Recibo</th><th>Acção</th>";
-	Print "</tr>";
-	// Loop the recordset $rs
-	while($row = mysql_fetch_array($rs)) {
-
-		Print "<tr>"; 
- 		Print "<td><input type='checkbox' id='entryCheckbox'></td>";//".$row['Plan'] . "
- 		Print "<td>".$row['nome'] . "</td> "; 
- 		Print "<td>".$row['email'] . " </td>";
-		Print "<td>".$row['seccao'] ."</td>";//".$row['Plan'] . "
-		Print "<td>".$row['quota']. " </td>";
-		Print "<td>" .$row['recibo']. "</td>";//".$row['Remaning_Time'] . "
-		Print "<td><div class='btn-group'><button class='btn btn-mini' id='editBtn' onclick='editRow(this);'><i class='icon-pencil'></i></button><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-warning' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
-		Print "</tr>"; 
-	}
-	Print "</table>"; 
-	// Close the database connection
-	mysql_close();	
+		getAno();
+		closedb();
 	?>
 
     
@@ -142,6 +110,24 @@ if(!isset($_SESSION['myusername']) ){
 			
 
 	  				if((cells[5].innerHTML == "0") || (cells[5].innerHTML == null))
+	  				{
+	  					cells[0].innerHTML = "<input type='checkbox' id='entryCheckbox' checked>";
+	  				}
+	  				else
+	  				{
+	  					cells[0].innerHTML = "<input type='checkbox' id='entryCheckbox'>";
+	  					
+	  				}
+			  		
+			  	} 
+		  	break;
+		  	case 2://com recibo
+		  		for(var i=1; i<tablerows.length; i++)
+			  	{
+			  		var cells = tablerows[i].cells;
+			
+
+	  				if((cells[5].innerHTML != "0") && (cells[5].innerHTML != null))
 	  				{
 	  					cells[0].innerHTML = "<input type='checkbox' id='entryCheckbox' checked>";
 	  				}
@@ -353,6 +339,21 @@ if(!isset($_SESSION['myusername']) ){
 			
 		}
 		
+		function changeYear(ele)
+		{
+			var elem = ele.innerHTML;
+			$.post("DBModel.php", { novo_ano : elem},
+					function(data) {
+					alert("Delete row return: " + data);
+					window.location.reload();
+					});
+				<?php
+		
+				include('DBModel.php');
+				changeAno('');
+				?>
+			window.location.reload();
+		}
 	</script>
 
 	<!--http://localhost-->
