@@ -44,6 +44,5 @@ if($count==1){
 }
 else {
 	echo "Wrong Username or Password";
-	header("location:ListaEntradas.php");
 }
 ?>

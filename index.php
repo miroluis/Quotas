@@ -37,8 +37,9 @@ if(!isset($_SESSION['myusername']) ){
 	$strSQL = "SELECT * ";
 	$strSQL = $strSQL . " FROM elementos ";
 	$rs = mysql_query($strSQL);
-	
-	Print "<div class='container'>"; 
+
+    Print "<div class='container' >";
+
 	Print "<table id = 'tabela' class='table table-bordered table-striped table-hover'>";
 
 	Print "<tr>"; 
@@ -71,18 +72,20 @@ if(!isset($_SESSION['myusername']) ){
 			<a class="btn btn-primary" type="button" onclick='insnewRow();'>Adicionar elemento</a>
 			<a class="btn btn-primary inline" type="button" onclick='saveTable();'>Guardar nova ordem</a>
 		<!--</div>-->
-		
 	</div>
 	<br><br>
 	
-	<div class="centered-content">
+			
+                
+
+	<div style="text-align:center">
     	
       	Escreva aqui o e-mail a ser enviado:
     	<br>
-    	<form action='sendemail.php' method='POST'>
+    	<form>
 	    	<textarea class="field span10" id="textareaemail" name="textareEmail" rows="5" placeholder="Introduza o texto a enviar..."></textarea>
 	    	<br>
-	    	<button class="btn btn-primary" type="submit">Send</button>
+	    	<button class="btn btn-primary" onclick='sendemail();' type="button">Send</button>
 	    	<br><br>
     	</form>
     	<div class="alert fade in" id="alertaid" style="display:none; width:300px; text-align:center;">
@@ -91,7 +94,6 @@ if(!isset($_SESSION['myusername']) ){
 		</div>
 	</div>
 
-    
  	<br>
 	<a href="logout.php">LogOut</a>
 
@@ -120,7 +122,7 @@ if(!isset($_SESSION['myusername']) ){
 
 		function sendemail()
 		{
-				var texto = document.getElementById('textareaemail').value;
+				
 
 				var table=document.getElementById("tabela");
 				var tablerows = table.rows;
@@ -138,8 +140,14 @@ if(!isset($_SESSION['myusername']) ){
 							var email = cells[2].innerHTML;
 							var text = getEmailText();
 							//send e-mail code block here
-							alert("name: " + name + "; email: " + email + "; text: " + text);
-							break;
+							
+							$.post("email_man.php", { to : email, subject : name, body : text},
+							function(data) {
+							alert(data);
+							
+							});
+
+							
 						}
 					}
 				
