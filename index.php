@@ -21,6 +21,8 @@ if(!isset($_SESSION['myusername']) ){
 
 	<script language="JavaScript"></script> 
 
+
+	
 </head>
 <body class="preview" data-spy="scroll" data-target=".subnav" data-offset="80">
 	<h1 style='text-align:center'>Quotas do Ano 2011-2012</h1>
@@ -69,7 +71,7 @@ if(!isset($_SESSION['myusername']) ){
 		Print "<td>".$row['seccao'] ."</td>";//".$row['Plan'] . "
 		Print "<td>".$row['quota']. " </td>";
 		Print "<td>" .$row['recibo']. "</td>";//".$row['Remaning_Time'] . "
-		Print "<td><div class='btn-group'><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-warning' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
+		Print "<td><div class='btn-group'><button class='btn btn-mini' id='editBtn' onclick='editRow(this);'><i class='icon-pencil'></i></button><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-warning' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
 		Print "</tr>"; 
 	}
 	Print "</table>"; 
@@ -88,7 +90,17 @@ if(!isset($_SESSION['myusername']) ){
 	</div>
 	<br><br>
 	
-			
+			<div class="btn-group">
+                <button class="btn btn-info">Selecionar</button>
+                <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                  <li><a href="#home">Devedores</a></li>
+                  <li><a href="#"></a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                </ul>
+              </div>
                 
 
 	<div style="text-align:center">
@@ -181,7 +193,7 @@ if(!isset($_SESSION['myusername']) ){
 			a.innerHTML="<td><input type='checkbox' id='entryCheckbox' value='option1'></td>";
 			b.innerHTML="<td><input type='text' id='txtNome' style='width:100px' placeholder='Nome...'></td>";
 			c.innerHTML="<td><input type='text' id='txtEmail' style='width:100px' placeholder='Email...'></td>";
-			d.innerHTML="<td><select id='comboSeccao'><option>Lobitos</option><option>Exploradores</option><option>Pioneiros</option><option>Caminheiros</option><option>Chefes ?</option></select></td>";
+			d.innerHTML="<td><select id='comboSeccao'><option>Lobitos</option><option>Exploradores</option><option>Pioneiros</option><option>Caminheiros</option><option>Chefes</option></select></td>";
 			e.innerHTML="<td><input type='text' id='txtQuota' style='width:100px' placeholder='Quota...'></td>";
 			f.innerHTML="<td><input type='text' id='txtRecibo' style='width:100px' placeholder='Recibo...'></td>";
 			g.innerHTML="<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='teste1' onclick='fixontable(this);'><i class='icon-ok'></i></button><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-warning' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
@@ -214,7 +226,7 @@ if(!isset($_SESSION['myusername']) ){
 			cells_row[3].innerHTML = c;
 			cells_row[4].innerHTML = d;
 			cells_row[5].innerHTML = e;
-			cells_row[6].innerHTML = "<div class='btn-group'><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-warning' onclick='removeRow(this);'><i class='icon-remove'></i></button></div>";
+			cells_row[6].innerHTML = "<div class='btn-group'><button class='btn btn-mini' id='editBtn' onclick='editRow(this);'><i class='icon-pencil'></i></button><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-warning' onclick='removeRow(this);'><i class='icon-remove'></i></button></div>";
 
 			var query = "INSERT into elementos (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
 				$.post("managedb.php", { sql_query : query},
