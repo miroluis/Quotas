@@ -52,7 +52,7 @@ if(!isset($_SESSION['myusername']) ){
 
 	Print "<tr>"; 
  		//<input type="checkbox" id="optionsCheckbox" value="option1">
-	Print "<th><input type='checkbox' id='optionsCheckboxgeral'	onclick='updateCheckboxes();'></th> ";
+	Print "<th><div class='btn-group'><button class='btn btn-info' onclick='checkUpdate(0);'>Selecionar</button><button class='btn btn-info dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button><ul class='dropdown-menu'><li><a onclick='checkUpdate(1);'>Devedores</a></li><li><a onclick='checkUpdate(2);'>Com recibo</a></li></ul></div></th> ";
 	Print "<th>Nome</th> <th>Email</th><th>Secção</th><th>Quota</th><th>Recibo</th><th>Acção</th>";
 	Print "</tr>";
 	// Loop the recordset $rs
@@ -83,19 +83,7 @@ if(!isset($_SESSION['myusername']) ){
 		<!--</div>-->
 	</div>
 	<br><br>
-	
-			<div class="btn-group">
-                <button class="btn btn-info">Selecionar</button>
-                <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                  <li><a href="#home">Devedores</a></li>
-                  <li><a href="#"></a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li class="divider"></li>
-                  <li><a href="#">Separated link</a></li>
-                </ul>
-              </div>
-                
+         
 
 	<div style="text-align:center">
     	
@@ -122,20 +110,53 @@ if(!isset($_SESSION['myusername']) ){
 	
 	<script type="text/javascript">
 
-	  function updateCheckboxes()
+		var checkgeral = true;
+	  function checkUpdate(btn)
 	  {
-	  	var checkgeral = document.getElementById('optionsCheckboxgeral').checked;
-	  	var inputs = document.getElementsByTagName('input');
+	  	var tablerows = document.getElementById('tabela').rows;
+	
+	  	switch(btn)
+	  	{
+	  		case 0://geral
+			  	for(var i=1; i<tablerows.length; i++)
+			  	{
+			  		var inputs = tablerows[i].cells[0];
+			  		
+	  				if(checkgeral)
+	  				{
+	  					inputs.innerHTML = "<input type='checkbox' id='entryCheckbox' checked>";
+	  					
+	  				}
+	  				else
+	  				{
+	  					inputs.innerHTML = "<input type='checkbox' id='entryCheckbox'>";
+	  					
+	  				}
+			  		
+			  	} 
+		  	break;
+		  	case 1://devedores
+		  		for(var i=1; i<tablerows.length; i++)
+			  	{
+			  		var cells = tablerows[i].cells;
+			
 
-	  	for(var i=0; i<inputs.length; i++){
-	  		if(inputs[i].getAttribute('type')=='checkbox'){
-	  			var ident = inputs[i].id;
-	  			if(ident.indexOf('entryCheckbox') != -1)
-	  				inputs[i].checked = checkgeral;
-	  		}
-	  	} 
-
+	  				if((cells[5].innerHTML == "0") || (cells[5].innerHTML == null))
+	  				{
+	  					cells[0].innerHTML = "<input type='checkbox' id='entryCheckbox' checked>";
+	  				}
+	  				else
+	  				{
+	  					cells[0].innerHTML = "<input type='checkbox' id='entryCheckbox'>";
+	  					
+	  				}
+			  		
+			  	} 
+		  	break;
+	  	}
 	  	
+	  	if(checkgeral) checkgeral = false;
+	  	else checkgeral = true;
 	  }
 
 		function sendemail()
