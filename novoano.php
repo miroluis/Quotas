@@ -43,7 +43,7 @@
                 </label>
                 
               
-							<button class="btn btn-primary" href='index.php' onclick='checkForm();'>Criar</button>
+							<button class="btn btn-primary" onclick='checkForm();'>Criar</button>
 						
 					</div>
 				</div>
@@ -70,6 +70,7 @@
               $.post("managedb.php", { sql_query : query},
                 function(data) {
                   alert("Create return: " + data);
+                  window.location.assign("index.php");
                 });
              }
           }
