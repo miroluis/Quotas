@@ -18,24 +18,26 @@ function ProcuraAnos() {
 
 	while($row = mysql_fetch_array($rs)) {
 
-		if($row[0] != "users")
+		if(($row[0] != "users") && ($row[0] != "ano_activo"))
 		{
 		Print "<li class='active'>"; 
-		Print "<a id='teste' onclick='changeYear(this);'>".$row[0] . "</a> </li>";  		
+		Print "<a onclick='changeYear(this);'>".$row[0] . "</a> </li>\n";  		
+		}
 	}
-	}
+	Print "<li><a href='novoano.php'>Novo ano...</a></li>";
 	Print "</ul>";
+
 	}
 
 
-	function getAno()
+	function setTable()
 	{
-		
 		$ano = mysql_query("SELECT * FROM ano_activo;");
 		$ano_f = mysql_fetch_array($ano);
-		$strSQL = "SELECT * FROM ".$ano_f[0]." ;";
-		$rs = mysql_query($strSQL);
 
+		$strSQL = "SELECT * FROM ".$ano_f[1]." ;";
+		$rs = mysql_query($strSQL);
+		
 		Print "<table id = 'tabela' class='table table-bordered table-striped table-hover'>";
 
 		Print "<tr>"; 

@@ -8,6 +8,7 @@ if(!isset($_SESSION['myusername']) ){
 	header("location:main_login.php");
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 
@@ -16,10 +17,6 @@ if(!isset($_SESSION['myusername']) ){
 	<title>Quotas</title>
 
 	<link href="bootstrap/css/bootstrap.css" rel="stylesheet">  
-	<script src="http://code.jquery.com/jquery-latest.js"></script>
-	<script src="bootstrap/js/bootstrap.min.js"></script>
-
-	<script language="JavaScript"></script> 
 
 
 	
@@ -37,18 +34,13 @@ if(!isset($_SESSION['myusername']) ){
 		include('DBModel.php');
 		LigaBD();
 		ProcuraAnos();
-		getAno();
+		setTable();
 		closedb();
 	?>
 
     
-
-
-	
-		<!--<div class="btn-group span5">-->
-			<a class="btn btn-primary" type="button" onclick='insnewRow();'>Adicionar elemento</a>
-			<a class="btn btn-primary inline" type="button" onclick='saveTable();'>Guardar nova ordem</a>
-		<!--</div>-->
+		<a class="btn btn-primary" type="button" onclick='insnewRow();'>Adicionar elemento</a>
+		
 	</div>
 	<br><br>
          
@@ -58,15 +50,11 @@ if(!isset($_SESSION['myusername']) ){
       	Escreva aqui o e-mail a ser enviado:
     	<br>
     	<form>
-	    	<textarea class="field span10" id="textareaemail" name="textareEmail" rows="5" placeholder="Introduza o texto a enviar..."></textarea>
+	    	<textarea class="field span10" id="textareaemail" rows="5" placeholder="Introduza o texto a enviar..."></textarea>
 	    	<br>
 	    	<button class="btn btn-primary" onclick='sendemail();' type="button">Send</button>
 	    	<br><br>
     	</form>
-    	<div class="alert fade in" id="alertaid" style="display:none; width:300px; text-align:center;">
-    		<button type="button" class="close">&times;</button>
-    		Your error message goes here...
-		</div>
 	</div>
 
  	<br>
@@ -74,10 +62,10 @@ if(!isset($_SESSION['myusername']) ){
 
 
 	
-
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
 	
 	<script type="text/javascript">
-
 		var checkgeral = true;
 	  function checkUpdate(btn)
 	  {
@@ -198,8 +186,6 @@ if(!isset($_SESSION['myusername']) ){
 			e.innerHTML="<td><input type='text' id='txtQuota' style='width:100px' placeholder='Quota...'></td>";
 			f.innerHTML="<td><input type='text' id='txtRecibo' style='width:100px' placeholder='Recibo...'></td>";
 			g.innerHTML="<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='teste1' onclick='fixontable(this);'><i class='icon-ok'></i></button><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-warning' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
-
-			updateCheckboxes();
 		}
 		
 
@@ -228,18 +214,31 @@ if(!isset($_SESSION['myusername']) ){
 			cells_row[4].innerHTML = d;
 			cells_row[5].innerHTML = e;
 			cells_row[6].innerHTML = "<div class='btn-group'><button class='btn btn-mini' id='editBtn' onclick='editRow(this);'><i class='icon-pencil'></i></button><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-warning' onclick='removeRow(this);'><i class='icon-remove'></i></button></div>";
-
-			var query = "INSERT into elementos (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
+			
+			var temp = getCurAno();
+			alert(temp);
+			var query = "INSERT into "+temp+" (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
 				$.post("managedb.php", { sql_query : query},
 					function(data) {
 					alert("Insert return: " + data);
 					});
 		}
 
+		function getCurAno()
+		{
+			var query = "SELECT * FROM ano_activo;";
+			$.post("managedb.php", { sql_query : query, get : "true"},
+					function(data) {
+				
+					return data;
+					});
+
+		}
+
 		function saveTable()
 		{
 			
-			var querys = "TRUNCATE TABLE elementos;";
+			var querys = "TRUNCATE TABLE "+getCurAno();+";";
 			$.post("managedb.php", { sql_query : querys},
 					function(data) {
 					alert("Truncate return: " + data);
@@ -256,7 +255,7 @@ if(!isset($_SESSION['myusername']) ){
 						var e = cells[5].innerHTML;
 						
 
-						var query = "INSERT into elementos (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
+						var query = "INSERT into "+getCurAno();+" (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
 						$.post("managedb.php", { sql_query : query},
 							function(data) {
 								alert("Insert return: " + data);
@@ -315,7 +314,7 @@ if(!isset($_SESSION['myusername']) ){
 				g.innerHTML=cells_row[6].innerHTML;
 				curRow.parentElement.deleteRow(curRow.rowIndex);
 
-				
+				saveTable();
 			}
 			
 		}
@@ -330,7 +329,7 @@ if(!isset($_SESSION['myusername']) ){
 			
 			table.deleteRow(row.rowIndex);
 
-			var query = "DELETE FROM elementos WHERE nome = '"+nome+"' AND email = '"+email+"';";
+			var query = "DELETE FROM "+getCurAno();+" WHERE nome = '"+nome+"' AND email = '"+email+"';";
 				$.post("managedb.php", { sql_query : query},
 					function(data) {
 					alert("Delete row return: " + data);
@@ -341,18 +340,14 @@ if(!isset($_SESSION['myusername']) ){
 		
 		function changeYear(ele)
 		{
-			var elem = ele.innerHTML;
-			$.post("DBModel.php", { novo_ano : elem},
-					function(data) {
+			var new_ano = ele.innerHTML;
+			
+			var query = "UPDATE ano_activo SET ano='"+new_ano+"' WHERE id='0';";
+			$.post("managedb.php", { sql_query : query},
+				function(data) {
 					alert("Delete row return: " + data);
 					window.location.reload();
-					});
-				<?php
-		
-				include('DBModel.php');
-				changeAno('');
-				?>
-			window.location.reload();
+				});
 		}
 	</script>
 

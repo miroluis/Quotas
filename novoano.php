@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
    <meta charset="UTF-8" />
-    <title>Sign Up</title>
+    <title>Iniciar um novo ano</title>
     
 
     <!-- Le styles -->
@@ -16,80 +16,62 @@
         padding-top: 40px; 
       }
       .container {
-        width: 300px;
+        width: 350px;
       }
-
-      /* The white background content wrapper */
-      .container > .content {
-        background-color: #fff;
-        padding: 20px;
-        margin: 0 -20px; 
-        -webkit-border-radius: 10px 10px 10px 10px;
-           -moz-border-radius: 10px 10px 10px 10px;
-                border-radius: 10px 10px 10px 10px;
-        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-                box-shadow: 0 1px 2px rgba(0,0,0,.15);
-      }
-
-	  .login-form {
-		margin-left: 65px;
-	  }
-	
-	  legend {
-		margin-right: -50px;
-		font-weight: bold;
-	  	color: #404040;
-	  }
 
     </style>
 
 </head>
 <body>
 	<div class="container">
-		<div class="content">
-			<div class="row">
-				<div class="login-form">
-					<h2>Sign up</h2>
+		<div class="well" style='background-color: #fff'>
+
+					<h2>Iniciar um novo ano</h2>
 					<div>
 						
 							
-								<input type="text" id='txtUsername' placeholder="Username">
+								<input type="text" id='txtAno' placeholder="Ano">
 						
-								<input type="password" id='txtPassword' placeholder="Password">
-						
-                <input type="password" id='txtPasswordConf' placeholder="Confirm password">
+								<input type="text" id='qLobitos' placeholder="Quota lobitos">
+                <input type="text" id='qExploradores' placeholder="Quota exploradores">
+                <input type="text" id='qPioneiros' placeholder="Quota pioneiros">
+                <input type="text" id='qCaminheiros' placeholder="Quota caminheiros">
+                <input type="text" id='qChefes' placeholder="Quota chefes">
+                <label class="radio">
+                  <input type="checkbox" name="optionsRadios" id="replicar_id" value="option1">
+                  Replicar ano selecionado?
+                </label>
+                
               
-             
-                <input type="email" id='txtEmail' placeholder="Email address">
-              
-							<button class="btn btn-primary" onclick='checkSignUp();'>Submit</button>
+							<button class="btn btn-primary" href='index.php' onclick='checkForm();'>Criar</button>
 						
 					</div>
 				</div>
 			</div>
-		</div>
-	</div> <!-- /container -->
 
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script src="bootstrap/js/bootstrap.min.js"></script>
 
     <script type="text/javascript">
-          function checkSignUp()
+          function checkForm()
           {
-              var pass = document.getElementById('txtPassword').value;
-              var confpass = document.getElementById('txtPasswordConf').value;
-              if(pass != confpass) return false;
+             var ano = document.getElementById('txtAno').value;
+             var qLobitos = document.getElementById('qLobitos').value;
+             var qExploradores = document.getElementById('qExploradores').value;
+             var qPioneiros = document.getElementById('qPioneiros').value;
+             var qCaminheiros = document.getElementById('qCaminheiros').value;
+             var qChefes = document.getElementById('qChefes').value;
+             var replicar = document.getElementById('replicar_id').checked;
+             
 
-              var user = document.getElementById('txtUsername').value;
-              var email = document.getElementById('txtEmail').value;
-            
-             var query = "INSERT into users (username,password,email) values ('"+user+"','"+pass+"','"+email+"');";
-        $.post("managedb.php", { sql_query : query},
-          function(data) {
-          alert("Insert return: " + data);
-          window.location.href = "index.php";
-          });
+             if(replicar)
+             {
+              var query = "CREATE TABLE "+ano+" LIKE elementos;";
+              $.post("managedb.php", { sql_query : query},
+                function(data) {
+                  alert("Create return: " + data);
+                });
+             }
           }
     </script>
 </body>

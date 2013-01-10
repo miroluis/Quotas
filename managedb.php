@@ -15,7 +15,14 @@
 	mysql_select_db("nfcportu_nfcconnect") or die(mysql_error());
 
 	$sql_query=$_POST['sql_query']; 
-	
+	$get=$_POST['get']; 
+
 	$result=mysql_query($sql_query);
+	if($get == 'true')
+	{
+		$result_2 = mysql_fetch_array($result);
+		echo $result_2[1];
+	}
+	else
 	echo $result;
 ?>
