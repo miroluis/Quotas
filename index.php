@@ -39,7 +39,11 @@ if(!isset($_SESSION['myusername']) ){
 	?>
 
     
-		<a class="btn btn-primary" type="button" onclick='insnewRow();'>Adicionar elemento</a>
+		    
+		<a class="btn btn-primary span2" type="button" onclick='insnewRow();'>Adicionar elemento</a>
+		<a class="btn btn-small span2 offset4" type="button" onclick='mostraReciboOuFactura("recibo");'>Aviso de recbio</a>
+		<a class="btn btn-small  span2" type="button" onclick='mostraReciboOuFactura("quota");'>Aviso de quota</a>
+		
 		
 	</div>
 	<br><br>
@@ -116,8 +120,9 @@ if(!isset($_SESSION['myusername']) ){
 	  				}
 			  		
 			  	} 
-			  	document.getElementById('alertaDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>O senhor 'Exemplo' deve a quota 'quota-exemplo' referentes ao 'ano-exemplo'.";
-			  		appendMessage(true);
+			  //	document.getElementById('alertaDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>O senhor 'Exemplo' deve a quota 'quota-exemplo' referentes ao 'ano-exemplo'.";
+			  //		appendMessage(true);
+			  			  	 mostraReciboOuFactura("quota");
 		  	break;
 		  	case 2://com recibo
 		  		for(var i=1; i<tablerows.length; i++)
@@ -137,8 +142,9 @@ if(!isset($_SESSION['myusername']) ){
 			  		
 			  		
 			  	} 
-			  	document.getElementById('alertaDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>O senhor 'Exemplo' pagou as quotas referentes ao 'ano-exemplo' e o recibo tem o numero: 'recibo-exemplo'.";
-			  		appendMessage(true);
+			 // 	document.getElementById('alertaDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>O senhor 'Exemplo' pagou as quotas referentes ao 'ano-exemplo' e o recibo tem o numero: 'recibo-exemplo'.";
+			  //		appendMessage(true);
+			  					  	 mostraReciboOuFactura("recibo");
 		  	break;
 	  	}
 	  	
@@ -146,7 +152,21 @@ if(!isset($_SESSION['myusername']) ){
 	  	else checkgeral = true;
 	  }
 
-	  function appendMessage(ele,texto)
+	  function mostraReciboOuFactura(ele)
+	  {
+	  	if(ele!='quota')
+	  	{
+	  	  	document.getElementById('alertaDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>O senhor 'Exemplo' pagou as quotas referentes ao 'ano-exemplo' e o recibo tem o numero: 'recibo-exemplo'.";
+			  	
+	  	}
+	  	else
+	  	{
+	  		document.getElementById('alertaDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>O senhor 'Exemplo' deve a quota 'quota-exemplo' referentes ao 'ano-exemplo'.";
+	  	}
+		appendMessage(true);
+	  }
+
+	  function appendMessage(ele)
 	  {
 	  	if(!ele)
 	  	{
