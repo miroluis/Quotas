@@ -22,7 +22,7 @@ if(!isset($_SESSION['myusername']) ){
 	
 </head>
 <body class="preview" data-spy="scroll" data-target=".subnav" data-offset="80">
-	<h1 style='text-align:center'>Quotas do Ano 2011-2012</h1>
+	<h1 style='text-align:center'>Gestor de quotas</h1>
 	<br><br>
 
 	<div class='container' >
@@ -74,6 +74,7 @@ if(!isset($_SESSION['myusername']) ){
 	<script type="text/javascript">
 		var appendMsg = true;
 		var checkgeral = true;
+
 	  function checkUpdate(btn)
 	  {
 	  	var tablerows = document.getElementById('tabela').rows;
@@ -182,7 +183,7 @@ if(!isset($_SESSION['myusername']) ){
 							
 							$.post("email_man.php", { to : email, subject : name, body : text},
 							function(data) {
-							alert(data);
+					
 							
 							});
 
@@ -211,7 +212,7 @@ if(!isset($_SESSION['myusername']) ){
 			d.innerHTML="<td><select id='comboSeccao'><option>Lobitos</option><option>Exploradores</option><option>Pioneiros</option><option>Caminheiros</option><option>Chefes</option></select></td>";
 			e.innerHTML="<td><input type='text' id='txtQuota' style='width:100px' placeholder='Quota...'></td>";
 			f.innerHTML="<td><input type='text' id='txtRecibo' style='width:100px' placeholder='Recibo...'></td>";
-			g.innerHTML="<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='teste1' onclick='fixontable(this);'><i class='icon-ok'></i></button><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-warning' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
+			g.innerHTML="<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='teste1' onclick='fixontable(this);'><i class='icon-ok'></i></button><button class='btn btn-mini btn-info' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini btn-info' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-danger' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
 		}
 		
 
@@ -239,13 +240,12 @@ if(!isset($_SESSION['myusername']) ){
 			cells_row[3].innerHTML = c;
 			cells_row[4].innerHTML = d;
 			cells_row[5].innerHTML = e;
-			cells_row[6].innerHTML = "<div class='btn-group'><button class='btn btn-mini' id='editBtn' onclick='editRow(this);'><i class='icon-pencil'></i></button><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-warning' onclick='removeRow(this);'><i class='icon-remove'></i></button></div>";
-			
+			cells_row[6].innerHTML = "<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='editBtn' onclick='editRow(this);'><i class='icon-pencil'></i></button><button class='btn btn-mini btn-info' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini btn-info' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-danger' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
 			var temp = document.getElementById('tabela').getAttribute('name');
 			var query = "INSERT into "+temp+" (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
 				$.post("managedb.php", { sql_query : query},
 					function(data) {
-					alert("Insert return: " + data);
+					
 					});
 		}
 
@@ -257,7 +257,7 @@ if(!isset($_SESSION['myusername']) ){
 			var querys = "TRUNCATE TABLE "+temp+";";
 			$.post("managedb.php", { sql_query : querys},
 					function(data) {
-					alert("Truncate return: " + data);
+				
 					var tablerows = document.getElementById('tabela').rows;
 
 					for(var i=1;i<tablerows.length;i++)
@@ -274,7 +274,7 @@ if(!isset($_SESSION['myusername']) ){
 						var query = "INSERT into "+temp+" (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
 						$.post("managedb.php", { sql_query : query},
 							function(data) {
-								alert("Insert return: " + data);
+								
 							});
 					}
 					});
@@ -333,6 +333,7 @@ if(!isset($_SESSION['myusername']) ){
 				saveTable();
 			}
 			
+			
 		}
 
 		function removeRow(ele)
@@ -348,12 +349,22 @@ if(!isset($_SESSION['myusername']) ){
 			var query = "DELETE FROM "+temp+" WHERE nome = '"+nome+"' AND email = '"+email+"';";
 				$.post("managedb.php", { sql_query : query},
 					function(data) {
-					alert("Delete row return: " + data);
+				
 					window.location.reload();
 					});
 			
 		}
 		
+		function editRow(ele)
+		{
+			var curRow = ele.parentNode.parentNode.parentNode;
+			var cells = curRow.getElementsByTagName('td');
+			var phNome = cells[1].innerHTML;
+			var phEmail = cells[2].innerHTML;
+			var phSeccao = cells[3].innerHTML;
+			var phQuota = cells[4]
+		}
+
 		function changeYear(ele)
 		{
 			var new_ano = ele.innerHTML;
@@ -361,10 +372,16 @@ if(!isset($_SESSION['myusername']) ){
 			var query = "UPDATE ano_activo SET ano='"+new_ano+"' WHERE id='0';";
 			$.post("managedb.php", { sql_query : query},
 				function(data) {
-					//alert("Novo ano return: " + data);
+				
 					window.location.reload();
 				});
 		}
+
+		window.onload = function()
+			{
+				var temp = document.getElementById('tabela').getAttribute('name');
+				document.getElementById('novoanobtn').parentNode.innerHTML = "<a id='novoanobtn' href='novoano.php?key="+temp+"'>Novo ano...</a>";
+			}
 	</script>
 
 	<!--http://localhost-->

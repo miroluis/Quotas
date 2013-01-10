@@ -25,7 +25,6 @@
 <body>
 	<div class="container">
 		<div class="well" style='background-color: #fff'>
-
 					<h2>Iniciar um novo ano</h2>
 					<div>
 						
@@ -63,18 +62,37 @@
              var qChefes = document.getElementById('qChefes').value;
              var replicar = document.getElementById('replicar_id').checked;
              
-
+             var link = new String(window.location);
+             var il = link.indexOf('=') + 1;
+             var prevAno = link.substring(il);
+             
              if(replicar)
              {
-              var query = "CREATE TABLE "+ano+" LIKE elementos;";
+              var query = "CREATE TABLE "+ano+" LIKE "+prevAno+";";
               $.post("managedb.php", { sql_query : query},
-                function(data) {
-                  var query = "CREATE TABLE "+ano+" SELECT * from elementos;";
-                  $.post("managedb.php", { sql_query : query},
+                function(data){
+                  alert(data);
+                  var query_a = "INSERT into "+ano+" SELECT * from "+prevAno+";";
+                  $.post("managedb.php", { sql_query : query_a},
                     function(data) {
-                      window.location.assign("index.php");
+                      
+                           var query_a = "UPDATE "+ano+" SET `quota` = ''";
+                          $.post("managedb.php", { sql_query : query_a},
+                    function(data) {
+                              var query_a = "UPDATE "+ano+" SET `recibo` = ''";
+                             $.post("managedb.php", { sql_query : query_a},
+                              function(data) {
+                      
+
+                      //
+                            });
+
+                      //
+                    });
+                      
                     });
                 });
+
              }
           }
     </script>

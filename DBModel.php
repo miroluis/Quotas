@@ -24,7 +24,9 @@ function ProcuraAnos() {
 		Print "<a onclick='changeYear(this);'>".$row[0] . "</a> </li>\n";  		
 		}
 	}
-	Print "<li><a href='novoano.php'>Novo ano...</a></li>";
+	
+
+	Print "<li><a id='novoanobtn' href='novoano.php?key='>Novo ano...</a></li>";
 	Print "</ul>";
 
 	}
