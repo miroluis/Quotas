@@ -45,16 +45,22 @@ if(!isset($_SESSION['myusername']) ){
 	<br><br>
          
 
-	<div style="text-align:center">
+	<div class='container'style="text-align:center">
     	
       	Escreva aqui o e-mail a ser enviado:
-    	<br>
+    
     	<form>
-	    	<textarea class="field span10" id="textareaemail" rows="5" placeholder="Introduza o texto a enviar..."></textarea>
+	    	<textarea class="field span12" id="textareaemail" rows="5" placeholder="Introduza o texto a enviar..."></textarea>
 	    	<br>
-	    	<button class="btn btn-primary" onclick='sendemail();' type="button">Send</button>
+	    	<div class="alert alert-success alert-block" id='alertaDiv' style='visibility:hidden'>
+    		</div>
+    		
+	    	<button class="btn btn-info btn-large" onclick='sendemail();' type="button">Send</button>
 	    	<br><br>
     	</form>
+
+    	
+    	
 	</div>
 
  	<br>
@@ -66,6 +72,7 @@ if(!isset($_SESSION['myusername']) ){
 	<script src="bootstrap/js/bootstrap.min.js"></script>
 	
 	<script type="text/javascript">
+		var appendMsg = true;
 		var checkgeral = true;
 	  function checkUpdate(btn)
 	  {
@@ -81,12 +88,12 @@ if(!isset($_SESSION['myusername']) ){
 	  				if(checkgeral)
 	  				{
 	  					inputs.innerHTML = "<input type='checkbox' id='entryCheckbox' checked>";
-	  					
+	  					appendMessage(false);
 	  				}
 	  				else
 	  				{
 	  					inputs.innerHTML = "<input type='checkbox' id='entryCheckbox'>";
-	  					
+	  					appendMessage(false);
 	  				}
 			  		
 			  	} 
@@ -108,6 +115,8 @@ if(!isset($_SESSION['myusername']) ){
 	  				}
 			  		
 			  	} 
+			  	document.getElementById('alertaDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>O senhor 'Exemplo' deve a quota 'quota-exemplo' referentes ao 'ano-exemplo'.";
+			  		appendMessage(true);
 		  	break;
 		  	case 2://com recibo
 		  		for(var i=1; i<tablerows.length; i++)
@@ -125,12 +134,29 @@ if(!isset($_SESSION['myusername']) ){
 	  					
 	  				}
 			  		
+			  		
 			  	} 
+			  	document.getElementById('alertaDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>O senhor 'Exemplo' pagou as quotas referentes ao 'ano-exemplo' e o recibo tem o numero: 'recibo-exemplo'.";
+			  		appendMessage(true);
 		  	break;
 	  	}
 	  	
 	  	if(checkgeral) checkgeral = false;
 	  	else checkgeral = true;
+	  }
+
+	  function appendMessage(ele)
+	  {
+	  	if(!ele)
+	  	{
+	  		document.getElementById('alertaDiv').style.visibility = 'hidden'; 
+	  		
+	  	}
+	  	else
+	  	{
+	  		document.getElementById('alertaDiv').style.visibility = 'visible'; 
+	  	}
+	  	appendMsg = ele;
 	  }
 
 		function sendemail()
@@ -215,8 +241,7 @@ if(!isset($_SESSION['myusername']) ){
 			cells_row[5].innerHTML = e;
 			cells_row[6].innerHTML = "<div class='btn-group'><button class='btn btn-mini' id='editBtn' onclick='editRow(this);'><i class='icon-pencil'></i></button><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-warning' onclick='removeRow(this);'><i class='icon-remove'></i></button></div>";
 			
-			var temp = getCurAno();
-			alert(temp);
+			var temp = document.getElementById('tabela').getAttribute('name');
 			var query = "INSERT into "+temp+" (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
 				$.post("managedb.php", { sql_query : query},
 					function(data) {
@@ -224,21 +249,12 @@ if(!isset($_SESSION['myusername']) ){
 					});
 		}
 
-		function getCurAno()
-		{
-			var query = "SELECT * FROM ano_activo;";
-			$.post("managedb.php", { sql_query : query, get : "true"},
-					function(data) {
-				
-					return data;
-					});
 
-		}
 
 		function saveTable()
 		{
-			
-			var querys = "TRUNCATE TABLE "+getCurAno();+";";
+			var temp = document.getElementById('tabela').getAttribute('name');
+			var querys = "TRUNCATE TABLE "+temp+";";
 			$.post("managedb.php", { sql_query : querys},
 					function(data) {
 					alert("Truncate return: " + data);
@@ -255,7 +271,7 @@ if(!isset($_SESSION['myusername']) ){
 						var e = cells[5].innerHTML;
 						
 
-						var query = "INSERT into "+getCurAno();+" (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
+						var query = "INSERT into "+temp+" (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
 						$.post("managedb.php", { sql_query : query},
 							function(data) {
 								alert("Insert return: " + data);
@@ -328,8 +344,8 @@ if(!isset($_SESSION['myusername']) ){
 			var table =document.getElementById('tabela');
 			
 			table.deleteRow(row.rowIndex);
-
-			var query = "DELETE FROM "+getCurAno();+" WHERE nome = '"+nome+"' AND email = '"+email+"';";
+			var temp = document.getElementById('tabela').getAttribute('name');
+			var query = "DELETE FROM "+temp+" WHERE nome = '"+nome+"' AND email = '"+email+"';";
 				$.post("managedb.php", { sql_query : query},
 					function(data) {
 					alert("Delete row return: " + data);
@@ -345,7 +361,7 @@ if(!isset($_SESSION['myusername']) ){
 			var query = "UPDATE ano_activo SET ano='"+new_ano+"' WHERE id='0';";
 			$.post("managedb.php", { sql_query : query},
 				function(data) {
-					alert("Delete row return: " + data);
+					//alert("Novo ano return: " + data);
 					window.location.reload();
 				});
 		}

@@ -38,7 +38,7 @@ function ProcuraAnos() {
 		$strSQL = "SELECT * FROM ".$ano_f[1]." ;";
 		$rs = mysql_query($strSQL);
 		
-		Print "<table id = 'tabela' class='table table-bordered table-striped table-hover'>";
+		Print "<table id = 'tabela' name='".$ano_f[1] . "' class='table table-bordered table-striped table-hover'>";
 
 		Print "<tr>"; 
 	 		//<input type="checkbox" id="optionsCheckbox" value="option1">
@@ -55,7 +55,7 @@ function ProcuraAnos() {
 			Print "<td>".$row['seccao'] ."</td>";//".$row['Plan'] . "
 			Print "<td>".$row['quota']. " </td>";
 			Print "<td>" .$row['recibo']. "</td>";//".$row['Remaning_Time'] . "
-			Print "<td><div class='btn-group'><button class='btn btn-mini' id='editBtn' onclick='editRow(this);'><i class='icon-pencil'></i></button><button class='btn btn-mini' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-warning' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
+			Print "<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='editBtn' onclick='editRow(this);'><i class='icon-pencil'></i></button><button class='btn btn-mini btn-info' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini btn-info' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-danger' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
 			Print "</tr>"; 
 		}
 		Print "</table>"; 

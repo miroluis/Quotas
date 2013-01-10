@@ -69,8 +69,11 @@
               var query = "CREATE TABLE "+ano+" LIKE elementos;";
               $.post("managedb.php", { sql_query : query},
                 function(data) {
-                  alert("Create return: " + data);
-                  window.location.assign("index.php");
+                  var query = "CREATE TABLE "+ano+" SELECT * from elementos;";
+                  $.post("managedb.php", { sql_query : query},
+                    function(data) {
+                      window.location.assign("index.php");
+                    });
                 });
              }
           }
