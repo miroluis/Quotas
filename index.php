@@ -146,7 +146,7 @@ if(!isset($_SESSION['myusername']) ){
 	  	else checkgeral = true;
 	  }
 
-	  function appendMessage(ele)
+	  function appendMessage(ele,texto)
 	  {
 	  	if(!ele)
 	  	{
@@ -245,7 +245,7 @@ if(!isset($_SESSION['myusername']) ){
 			var query = "INSERT into "+temp+" (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
 				$.post("managedb.php", { sql_query : query},
 					function(data) {
-					
+					window.location.reload();
 					});
 		}
 
@@ -355,15 +355,6 @@ if(!isset($_SESSION['myusername']) ){
 			
 		}
 		
-		function editRow(ele)
-		{
-			var curRow = ele.parentNode.parentNode.parentNode;
-			var cells = curRow.getElementsByTagName('td');
-			var phNome = cells[1].innerHTML;
-			var phEmail = cells[2].innerHTML;
-			var phSeccao = cells[3].innerHTML;
-			var phQuota = cells[4]
-		}
 
 		function changeYear(ele)
 		{

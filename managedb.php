@@ -18,11 +18,6 @@
 	$get=$_POST['get']; 
 
 	$result=mysql_query($sql_query);
-	if($get == 'true')
-	{
-		$result_2 = mysql_fetch_array($result);
-		echo $result_2[1];
-	}
-	else
+
 	echo $result;
 ?>
