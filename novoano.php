@@ -43,7 +43,7 @@
                 
               
 							<button class="btn btn-primary" onclick='checkForm();'>Criar</button>
-						
+						   <a class="btn btn-primary inline offset2" href="index.php">Voltar</a>
 					</div>
 				</div>
 			</div>
