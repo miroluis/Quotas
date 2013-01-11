@@ -18,7 +18,9 @@
 				<input name="mypassword" type="password" id="mypassword" PlaceHolder = "Password"><br>
 				<input class="btn btn-primary" type="submit" name="Submit" value="Login">
 			</form>
+			<a class="btn btn-mini" href="index.html">Voltar</a>
 		</div>
+
 	</div>
 	<div id='copyrightDiv' style="text-align:center">
 		&copy; <a>Francisco Couceiro</a><br>
