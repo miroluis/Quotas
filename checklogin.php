@@ -3,7 +3,7 @@
 $host="localhost"; // Host name 
 $username="root"; // Mysql username 
 $password="root"; // Mysql password 
-$db_name="nfcportu_nfcconnect"; // Database name 
+$db_name="users"; // Database name 
 $tbl_name="users"; // Table name 
 
 // Connect to server and select databse.
@@ -31,7 +31,9 @@ $count=mysql_num_rows($result);
 
 // If result matched $myusername and $mypassword, table row must be 1 row
 if($count==1){
-
+	$cur_db_rs = mysql_fetch_array($result);
+	$select_db = "UPDATE  users.curDB SET database_name='".$cur_db_rs[3]."' WHERE id='0';";
+  	$r_tres = mysql_query($select_db);
 	// Register $myusername, $mypassword and redirect to file "login_success.php"
 //	session_start();
 
@@ -40,9 +42,11 @@ if($count==1){
 	session_start();
 	$_SESSION['myusername'] = $username;
 	//$_SESSION['mypassword'] = 'val';
-	header("location:index.php");//teste.php");
+	header("location:index_quotas.php");
 }
 else {
-	echo "Wrong Username or Password";
+	header("location:index.html?key=failed");
+
 }
+
 ?>

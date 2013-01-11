@@ -18,15 +18,19 @@ if(!isset($_SESSION['myusername']) ){
 
 	<link href="bootstrap/css/bootstrap.css" rel="stylesheet">  
 
+	<style>
+		body .teste4
+		{
+
+			background-color: green; 
+		}
+	</style>
 
 	
 </head>
-<body class="preview" data-spy="scroll" data-target=".subnav" data-offset="80">
+<body class="preview" >
 	<h1 style='text-align:center'>Gestor de quotas</h1>
-	<br><br>
 
-	<div class='container' >
-		<ul class="nav nav-tabs">
 		
 
 	<?php
@@ -41,7 +45,7 @@ if(!isset($_SESSION['myusername']) ){
     
 		    
 		<a class="btn btn-primary span2" type="button" onclick='insnewRow();'>Adicionar elemento</a>
-		<a class="btn btn-small span2 offset4" type="button" onclick='mostraReciboOuFactura("recibo");'>Aviso de recbio</a>
+		<a class="btn btn-small span2 offset4" type="button" onclick='mostraReciboOuFactura("recibo");'>Aviso de recibo</a>
 		<a class="btn btn-small  span2" type="button" onclick='mostraReciboOuFactura("quota");'>Aviso de quota</a>
 		
 		
@@ -49,7 +53,7 @@ if(!isset($_SESSION['myusername']) ){
 	<br><br>
          
 
-	<div class='container'style="text-align:center">
+	<div class='container' style="text-align:center">
     	
       	Escreva aqui o e-mail a ser enviado:
     
@@ -60,15 +64,21 @@ if(!isset($_SESSION['myusername']) ){
     		</div>
     		
 	    	<button class="btn btn-info btn-large" onclick='sendemail();' type="button">Send</button>
-	    	<br><br>
     	</form>
 
     	
     	
 	</div>
 
+	<div id='copyrightDiv' style="text-align:center">
+		<button class="btn btn-error btn-mini" onclick='window.location.assign("logout.php");' type="button">Log out!</button><br>
+		&copy; <a>Francisco Couceiro</a><br>
+		&copy; <a href='http://www.miroelectronics.com/'>Miroelectronics</a><br>
+		<a href='http://site.onetag.pt/'>Powered by onetag</a>
+	</div>
+
  	<br>
-	<a href="logout.php">LogOut</a>
+	
 
 
 	
@@ -156,12 +166,12 @@ if(!isset($_SESSION['myusername']) ){
 	  {
 	  	if(ele!='quota')
 	  	{
-	  	  	document.getElementById('alertaDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>O senhor 'Exemplo' pagou as quotas referentes ao 'ano-exemplo' e o recibo tem o numero: 'recibo-exemplo'.";
+	  	  	document.getElementById('alertaDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>O senhor 'nome-exemplo' pagou as quotas referentes ao ano 'ano-exemplo' e o recibo tem o numero: 'recibo-exemplo'.";
 			  	
 	  	}
 	  	else
 	  	{
-	  		document.getElementById('alertaDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>O senhor 'Exemplo' deve a quota 'quota-exemplo' referentes ao 'ano-exemplo'.";
+	  		document.getElementById('alertaDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>O senhor 'nome-exemplo' deve uma quota no valor de 'quota-exemplo' (EUROS) referente ao ano 'ano-exemplo'.";
 	  	}
 		appendMessage(true);
 	  }
@@ -198,9 +208,38 @@ if(!isset($_SESSION['myusername']) ){
 						{
 							var name = cells[1].innerHTML;
 							var email = cells[2].innerHTML;
+							var quota = cells[4].innerHTML;
+							var recibo = cells[5].innerHTML;
+
 							var text = getEmailText();
+							var temp = document.getElementById('tabela').getAttribute('name');
 							//send e-mail code block here
+							if(appendMsg)
+							{
+								var append = document.getElementById('alertaDiv').innerHTML;
+								 var il = append.indexOf('</a>') + 4;
+             					var prev = append.substring(il);
+
+             					if(prev.indexOf("'nome-exemplo'") != -1);
+             					{
+             						prev = prev.replace("'nome-exemplo'",name);
+             					}
+             					if(prev.indexOf("'ano-exemplo'") != -1);
+             					{
+             						prev = prev.replace("'ano-exemplo'",temp);
+             					}
+             					if(prev.indexOf("'quota-exemplo'") != -1);
+             					{
+             						prev = prev.replace("'quota-exemplo'",quota);
+             					}
+             					if(prev.indexOf("'recibo-exemplo'") != -1);
+             					{
+             						prev = prev.replace("'recibo-exemplo'",recibo);
+             					}
+
+								text = text + "\n" + prev;
 							
+							}
 							$.post("email_man.php", { to : email, subject : name, body : text},
 							function(data) {
 					
@@ -232,7 +271,7 @@ if(!isset($_SESSION['myusername']) ){
 			d.innerHTML="<td><select id='comboSeccao'><option>Lobitos</option><option>Exploradores</option><option>Pioneiros</option><option>Caminheiros</option><option>Chefes</option></select></td>";
 			e.innerHTML="<td><input type='text' id='txtQuota' style='width:100px' placeholder='Quota...'></td>";
 			f.innerHTML="<td><input type='text' id='txtRecibo' style='width:100px' placeholder='Recibo...'></td>";
-			g.innerHTML="<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='teste1' onclick='fixontable(this);'><i class='icon-ok'></i></button><button class='btn btn-mini btn-info' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini btn-info' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-danger' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
+			g.innerHTML="<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='teste1' onclick='fixontable(this);'><i class='icon-ok'></i></button><button class='btn btn-mini btn-danger' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
 		}
 		
 
@@ -260,7 +299,7 @@ if(!isset($_SESSION['myusername']) ){
 			cells_row[3].innerHTML = c;
 			cells_row[4].innerHTML = d;
 			cells_row[5].innerHTML = e;
-			cells_row[6].innerHTML = "<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='editBtn' onclick='editRow(this);'><i class='icon-pencil'></i></button><button class='btn btn-mini btn-info' id='teste' onclick='moveRow(this,true);'><i class='icon-chevron-up'></i></button><button class='btn btn-mini btn-info' id='teste2' onclick='moveRow(this,false);'><i class='icon-chevron-down'></i></button><button class='btn btn-mini btn-danger' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
+			cells_row[6].innerHTML = "<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='editBtn' onclick='editRow(this);'><i class='icon-pencil'></i><button class='btn btn-mini btn-danger' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
 			var temp = document.getElementById('tabela').getAttribute('name');
 			var query = "INSERT into "+temp+" (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
 				$.post("managedb.php", { sql_query : query},
@@ -269,39 +308,34 @@ if(!isset($_SESSION['myusername']) ){
 					});
 		}
 
-
-
-		function saveTable()
+		function updateontable(ele)
 		{
+			var elem = ele;
+			var currow = elem.parentNode.parentNode.parentNode;
+			var ident = currow.getAttribute('id');
+		
+			var cells_row = currow.cells;
+
+			var curcells = currow.getElementsByTagName('td');
+			var a = curcells[1].childNodes[0].value;
+			var b = curcells[2].childNodes[0].value;
+			var c = curcells[3].childNodes[0].value;
+			var d = curcells[4].childNodes[0].value;
+			var e = curcells[5].childNodes[0].value;
+
+			cells_row[1].innerHTML = a;
+			cells_row[2].innerHTML = b;
+			cells_row[3].innerHTML = c;
+			cells_row[4].innerHTML = d;
+			cells_row[5].innerHTML = e;
+			cells_row[6].innerHTML = "<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='editBtn' onclick='editRow(this);'><i class='icon-pencil'></i></button><button class='btn btn-mini btn-danger' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
 			var temp = document.getElementById('tabela').getAttribute('name');
-			var querys = "TRUNCATE TABLE "+temp+";";
-			$.post("managedb.php", { sql_query : querys},
+
+			var query = "UPDATE "+temp+" SET nome='"+a+"',email='"+b+"',seccao='"+c+"',quota='"+d+"',recibo='"+e+"' WHERE id='"+ident+"';";
+				$.post("managedb.php", { sql_query : query},
 					function(data) {
-				
-					var tablerows = document.getElementById('tabela').rows;
-
-					for(var i=1;i<tablerows.length;i++)
-					{
-						var row = tablerows[i];
-						var cells = row.getElementsByTagName('td');
-						var a = cells[1].innerHTML;
-						var b = cells[2].innerHTML;
-						var c = cells[3].innerHTML;
-						var d = cells[4].innerHTML;
-						var e = cells[5].innerHTML;
-						
-
-						var query = "INSERT into "+temp+" (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
-						$.post("managedb.php", { sql_query : query},
-							function(data) {
-								
-							});
-					}
+					window.location.reload();
 					});
-
-			
-
-			
 		}
 
 		function moveRow(trigger, up)
@@ -388,6 +422,26 @@ if(!isset($_SESSION['myusername']) ){
 				});
 		}
 
+
+
+		function editRow(ele)
+		{
+				var cur_row = ele.parentNode.parentNode.parentElement;
+				var cells_r = cur_row.cells;
+
+				var nome = cells_r[1].innerHTML;
+				var email = cells_r[2].innerHTML;
+				var quota = cells_r[4].innerHTML;
+				var recibo = cells_r[5].innerHTML;
+
+				cells_r[1].innerHTML="<td><input type='text' id='txtNome' style='width:100px' placeholder='"+nome+"'></td>";
+				cells_r[2].innerHTML="<td><input type='text' id='txtEmail' style='width:100px' placeholder='"+email+"'></td>";
+				cells_r[3].innerHTML="<td><select id='comboSeccao'><option>Lobitos</option><option>Exploradores</option><option>Pioneiros</option><option>Caminheiros</option><option>Chefes</option></select></td>";
+				cells_r[4].innerHTML="<td><input type='text' id='txtQuota' style='width:100px' placeholder='"+quota+"'></td>";
+				cells_r[5].innerHTML="<td><input type='text' id='txtRecibo' style='width:100px' placeholder='"+recibo+"'></td>";
+				cells_r[6].innerHTML="<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='teste1' onclick='updateontable(this);'><i class='icon-ok'></i></button><button class='btn btn-mini btn-danger' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
+		
+		}
 		window.onload = function()
 			{
 				var temp = document.getElementById('tabela').getAttribute('name');

@@ -1,0 +1,56 @@
+<html>
+
+<head>
+<title>Sign Up - Criar nova base de dados</title>
+	 <link href="bootstrap/css/bootstrap.css" rel="stylesheet">  
+	 <style>
+	 body {
+        padding-top: 40px; 
+      }
+	 </style>
+</head>
+<body>
+	<div class="container" style='width:350px';>
+		<h2>Criar nova database</h2>
+		<div class="well" style='background-color: #fff'>
+			<form class = "well" style="text-align: center">
+				<input  name="novo_user_s" type="text" id="novo_user_s" PlaceHolder = "Username">	<br>
+				<input  name="novo_user_pass_s" type="password" id="novo_user_pass_s" PlaceHolder = "Password"> <br>	
+				<input name="nova_db_s" type="text" id="nova_db_s" PlaceHolder = "Nome para a database"><br>
+				<input class="btn btn-success" onclick='checkForm();' type='submit' value="Criar conta e database!">
+			</form>
+		</div>
+	</div>
+
+	<div id='copyrightDiv' style="text-align:center">
+		&copy; <a>Francisco Couceiro</a><br>
+		&copy; <a href='http://www.miroelectronics.com/'>Miroelectronics</a><br>
+		<a href='http://site.onetag.pt/'>Powered by onetag</a>
+	</div>
+
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+  	<script src="bootstrap/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+    	function checkForm()
+    	{
+    		 var db_name = document.getElementById('nova_db_s').value;
+             var user_name = document.getElementById('novo_user_s').value;
+             var user_pass = document.getElementById('novo_user_pass_s').value;
+
+             if((db_name.indexOf('-') != -1))
+             {
+             	alert("Utilize um nome como: agrupamento_exemplo.");
+             	return ;
+             }
+
+             $.post("signup.php", { novo_user_s : user_name, novo_user_pass_s:user_pass,nova_db_s:db_name},
+                              function(data) {
+                                 
+                                  window.location.assign("index_quotas.php");
+                      
+                            });
+    	}
+    </script>
+</body>
+</html>

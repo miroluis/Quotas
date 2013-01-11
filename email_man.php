@@ -7,11 +7,17 @@
   }
   
  require_once "Mail.php";
- 
+ include('DBModel.php');
  $from = "tesoureiro@cnepenela.com";//José Palaio <
   $to = $_POST['to'];
   $subject = $_POST['subject'];
   $body = $_POST['body'];
+ 
+ //Guarda e-mail
+  ligaBD();
+  $strSQL = "INSERT into guarda_email (email,body) values ('".$to."','".$body."');";
+  $rs = mysql_query($strSQL);
+  closedb();
 
  $host = "smtp.gmail.com";
  $port = "587";
@@ -40,6 +46,9 @@ $headers = $mime->headers($headers);
  if (PEAR::isError($mail)) {
    echo("<p>" . $mail->getMessage() . "</p>");
   } else {
+    $strSQL = "INSERT into guarda_email (email,body) values ('".$to."','".$body."');";
+  $rs = mysql_query($strSQL);
+  if($rs == "1")
    echo("<p>Message successfully sent!</p>");
   }
  ?>
