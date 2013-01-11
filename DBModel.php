@@ -40,7 +40,7 @@ function ProcuraAnos() {
 	$strSQL = "SHOW tables;";
 	$rs = mysql_query($strSQL);
 
-	Print	"<br><p style='text-align:center' class='text-success'>".$cur_db." - ".$cur_ano."</p>";
+	Print	"<h4><p style='text-align:center' class='text-success'>".$_SESSION['myusername']." :: ".$cur_db." :: ".$cur_ano."</p></h4>";
 	Print "<br><br>";
 
 	Print "<div class='well container' style='background-color:#fff'>";

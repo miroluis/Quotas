@@ -24,5 +24,7 @@
 
 	$result=mysql_query($sql_query);
 
+	mysql_close();
 	echo $result;
+
 ?>

@@ -1,0 +1,53 @@
+<html>
+
+<head>
+<title>Quotas - Adicionar utilizador</title>
+	 <link href="bootstrap/css/bootstrap.css" rel="stylesheet">  
+	 <style>
+	 body {
+        padding-top: 40px; 
+      }
+	 </style>
+</head>
+<body>
+	<div class="container" style='width:350px';>
+		<h2>Adicionar novo utilizador</h2>
+		<div class="well" style='background-color: #fff'>
+			<form class = "well" style="text-align: center">
+				<input  name="novo_user_s" type="text" id="novo_user_s" PlaceHolder = "Username">	<br>
+				<input  name="novo_user_pass_s" type="password" id="novo_user_pass_s" PlaceHolder = "Password"> <br>
+				<input  name="novo_user_pass_s_conf" type="password" id="novo_user_pass_s_conf" PlaceHolder = "Confirme a password"> <br>
+				<input  name="novo_user_email" type="email" id="novo_user_email" PlaceHolder = "Email">	<br>
+				<input class="btn btn-success" onclick='checkForm();' value="Adicionar utilizador!">
+			</form>
+		</div>
+	</div>
+
+	<div id='copyrightDiv' style="text-align:center">
+		&copy; <a>Francisco Couceiro</a><br>
+		&copy; <a href='http://www.miroelectronics.com/'>Miroelectronics</a><br>
+		<a href='http://site.onetag.pt/'>Powered by onetag</a>
+	</div>
+
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+  	<script src="bootstrap/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+    	function checkForm()
+    	{
+             var user_name = document.getElementById('novo_user_s').value;
+             var user_pass = document.getElementById('novo_user_pass_s').value;
+			 var user_pass_conf = document.getElementById('novo_user_pass_s_conf').value;	
+			 var user_email = document.getElementById('novo_user_email').value;
+
+			 if(user_pass != user_pass_conf)
+			 {
+			 	alert("As passwords não são iguais! Por favor confirme-as.");
+			 	return;
+			 }
+
+             $.post("newuser.php", { user : user_name, password:user_pass,email:user_email});
+    	}
+    </script>
+</body>
+</html>

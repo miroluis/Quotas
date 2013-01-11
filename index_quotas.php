@@ -72,7 +72,7 @@ if(!isset($_SESSION['myusername']) ){
 
 	<div id='copyrightDiv' style="text-align:center">
 		<button class="btn btn-error btn-mini" onclick='window.location.assign("logout.php");' type="button">Log out!</button>
-		<button class="btn btn-error btn-mini inline" onclick='window.location.assign("newuser.php");' type="button">Add user</button><br>
+		<a class="btn btn-error btn-mini inline" href="newuser.html" type="button"><i class="icon-user"></i>Adicionar novo utilizador</a><br>
 		
 		<br><div class='well container' id='copyrightDiv' style="text-align:center">
 		&copy; <a>Francisco Couceiro</a><br>

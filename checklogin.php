@@ -40,7 +40,7 @@ if($count==1){
 	//session_register("myusername");
 	//session_register("mypassword"); 
 	session_start();
-	$_SESSION['myusername'] = $username;
+	$_SESSION['myusername'] = $myusername;
 	//$_SESSION['mypassword'] = 'val';
 	header("location:index_quotas.php");
 }
