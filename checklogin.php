@@ -1,8 +1,8 @@
 <?php
 
 $host="localhost"; // Host name 
-$username="root"; // Mysql username 
-$password="root"; // Mysql password 
+$username="nfcportu_php"; // Mysql username 
+$password="Php2012"; // Mysql password 
 $db_name="users"; // Database name 
 $tbl_name="users"; // Table name 
 
