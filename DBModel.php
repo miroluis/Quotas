@@ -11,8 +11,8 @@
 function LigaBD() {
 
 	$host = "localhost";
-	$username = "root";
-	$password = "root";
+	$username = "nfcportu_php";
+	$password = "Php2012";
 	mysql_connect($host, $username, $password) or die (mysql_error ());
 
 	$cur_db_query = "SELECT * from users.curDB where id='0';";

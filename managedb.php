@@ -7,8 +7,8 @@
 	}
 	
 	$host = "localhost";
-	$username = "root";
-	$password = "root";
+	$username = "nfcportu_php";
+	$password = "Php2012";
 	mysql_connect($host, $username, $password) or die (mysql_error ());
 
 	// Seleciona o Banco de Dados
