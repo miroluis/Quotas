@@ -15,9 +15,12 @@
 		<div class="well" style='background-color: #fff'>
 			<form class = "well" style="text-align: center">
 				<input  name="novo_user_s" type="text" id="novo_user_s" PlaceHolder = "Username">	<br>
-				<input  name="novo_user_pass_s" type="password" id="novo_user_pass_s" PlaceHolder = "Password"> <br>	
+				<input  name="novo_user_pass_s" type="password" id="novo_user_pass_s" PlaceHolder = "Password"> <br>
+				<input  name="novo_user_pass_s_conf" type="password" id="novo_user_pass_s_conf" PlaceHolder = "Confirme a password"> <br>
+				<input  name="novo_user_email" type="email" id="novo_user_email" PlaceHolder = "Email">	<br>
+				<hr style="border-color: #32CD32">	
 				<input name="nova_db_s" type="text" id="nova_db_s" PlaceHolder = "Nome para a database"><br>
-				<input class="btn btn-success" onclick='checkForm();' type='submit' value="Criar conta e database!">
+				<input class="btn btn-success" onclick='checkForm();' value="Criar conta e database!">
 			</form>
 		</div>
 	</div>
@@ -37,6 +40,14 @@
     		 var db_name = document.getElementById('nova_db_s').value;
              var user_name = document.getElementById('novo_user_s').value;
              var user_pass = document.getElementById('novo_user_pass_s').value;
+			 var user_pass_conf = document.getElementById('novo_user_pass_s_conf').value;	
+			 var user_email = document.getElementById('novo_user_email').value;
+
+			 if(user_pass != user_pass_conf)
+			 {
+			 	alert("As passwords não são iguais! Por favor confirme-as.");
+			 	return;
+			 }
 
              if((db_name.indexOf('-') != -1))
              {
@@ -44,7 +55,7 @@
              	return ;
              }
 
-             $.post("signup.php", { novo_user_s : user_name, novo_user_pass_s:user_pass,nova_db_s:db_name},
+             $.post("signup.php", { novo_user_s : user_name, novo_user_pass_s:user_pass,novo_user_email_s:user_email,nova_db_s:db_name},
                               function(data) {
                                  
                                   window.location.assign("index_quotas.php");

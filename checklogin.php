@@ -32,7 +32,7 @@ $count=mysql_num_rows($result);
 // If result matched $myusername and $mypassword, table row must be 1 row
 if($count==1){
 	$cur_db_rs = mysql_fetch_array($result);
-	$select_db = "UPDATE  users.curDB SET database_name='".$cur_db_rs[3]."' WHERE id='0';";
+	$select_db = "UPDATE  users.curDB SET database_name='".$cur_db_rs[4]."' WHERE id='0';";
   	$r_tres = mysql_query($select_db);
 	// Register $myusername, $mypassword and redirect to file "login_success.php"
 //	session_start();

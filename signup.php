@@ -4,6 +4,8 @@
   $nova_db_name = $_POST['nova_db_s'];
   $novo_user = $_POST['novo_user_s'];
   $password_user = $_POST['novo_user_pass_s'];
+  $novo_user_email = $_POST['novo_user_email_s'];
+
 	$host = "localhost";
 	$username = "root";
 	$password = "root";
@@ -11,7 +13,7 @@
 
   criarDB($nova_db_name);
 
-  $adicionar_user = "INSERT into users.users (username, password, database_name) values ('".$novo_user."','".$password_user."','".$nova_db_name."');";
+  $adicionar_user = "INSERT into users.users (username, password, email, database_name) values ('".$novo_user."','".$password_user."','".$novo_user_email."','".$nova_db_name."');";
   $r_dois = mysql_query($adicionar_user);
 
   $select_db = "UPDATE  users.curDB SET database_name='".$nova_db_name."' WHERE id='0';";

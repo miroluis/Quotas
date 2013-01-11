@@ -43,7 +43,7 @@ function ProcuraAnos() {
 	Print	"<br><p style='text-align:center' class='text-success'>".$cur_db." - ".$cur_ano."</p>";
 	Print "<br><br>";
 
-	Print "<div class='well container' >";
+	Print "<div class='well container' style='background-color:#fff'>";
 	Print "	<ul class='nav nav-tabs'>";
 
 	while($row = mysql_fetch_array($rs)) {
@@ -56,7 +56,7 @@ function ProcuraAnos() {
 	}
 	
 
-	Print "<li><a id='novoanobtn' href='novoano.php?key='>Novo ano...</a></li>";
+	Print "<li><a href='novoano.php'>Novo ano...</a></li>";
 	Print "</ul>";
 
 	}
@@ -82,9 +82,9 @@ function ProcuraAnos() {
 
 		$rs = mysql_query($strSQL);
 		
-		Print "<table id = 'tabela' name='".$ano_f[1] . "' class='table table-hover'>";
+		Print "<table id='tabela' name='".$ano_f[1] ."' class='table table-condensed'>";
 
-		Print "<tr class='success'>"; 
+		Print "<tr>"; 
 	 		//<input type="checkbox" id="optionsCheckbox" value="option1">
 		Print "<th><div class='btn-group'><button class='btn btn-info' onclick='checkUpdate(0);'>Selecionar</button><button class='btn btn-info dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button><ul class='dropdown-menu'><li><a onclick='checkUpdate(1);'>Devedores</a></li><li><a onclick='checkUpdate(2);'>Com recibo</a></li></ul></div></th> ";
 		Print "<th>Nome</th> <th>Email</th><th>Secção</th><th>Quota</th><th>Recibo</th><th>Acção</th>";
@@ -106,6 +106,15 @@ function ProcuraAnos() {
 		// Close the database connection
 
 			
+	}
+
+	function getLabel()
+	{
+		$ano = mysql_query("SELECT * FROM ano_activo;");
+		$ano_f = mysql_fetch_array($ano);
+		$cur_ano = $ano_f[1];
+
+		Print "<span id='curanoLabel' name='".$cur_ano."'class='label label-success' >Replica o ano: ".$cur_ano." (seleccionado)</span>";
 	}
 
 	function closedb()

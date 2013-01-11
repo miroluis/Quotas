@@ -43,8 +43,8 @@ if(!isset($_SESSION['myusername']) ){
 	?>
 
     
-		    
-		<a class="btn btn-primary span2" type="button" onclick='insnewRow();'>Adicionar elemento</a>
+		 
+		<a class="btn btn-primary span2" rel="tooltip" title="Adiciona um de cada vez" data-placement="right" id="addbtn" type="button"  onclick='insnewRow(this);'>Adicionar elemento</a>
 		<a class="btn btn-small span2 offset4" type="button" onclick='mostraReciboOuFactura("recibo");'>Aviso de recibo</a>
 		<a class="btn btn-small  span2" type="button" onclick='mostraReciboOuFactura("quota");'>Aviso de quota</a>
 		
@@ -71,10 +71,14 @@ if(!isset($_SESSION['myusername']) ){
 	</div>
 
 	<div id='copyrightDiv' style="text-align:center">
-		<button class="btn btn-error btn-mini" onclick='window.location.assign("logout.php");' type="button">Log out!</button><br>
+		<button class="btn btn-error btn-mini" onclick='window.location.assign("logout.php");' type="button">Log out!</button>
+		<button class="btn btn-error btn-mini inline" onclick='window.location.assign("newuser.php");' type="button">Add user</button><br>
+		
+		<br><div class='well container' id='copyrightDiv' style="text-align:center">
 		&copy; <a>Francisco Couceiro</a><br>
 		&copy; <a href='http://www.miroelectronics.com/'>Miroelectronics</a><br>
 		<a href='http://site.onetag.pt/'>Powered by onetag</a>
+	</div>
 	</div>
 
  	<br>
@@ -84,10 +88,12 @@ if(!isset($_SESSION['myusername']) ){
 	
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script src="bootstrap/js/bootstrap.min.js"></script>
-	
+	<script src="bootstrap/js/bootstrap-tooltip.js"></script>
+
 	<script type="text/javascript">
 		var appendMsg = true;
 		var checkgeral = true;
+		var canAdd = true;
 
 	  function checkUpdate(btn)
 	  {
@@ -102,12 +108,14 @@ if(!isset($_SESSION['myusername']) ){
 			  		
 	  				if(checkgeral)
 	  				{
-	  					inputs.innerHTML = "<input type='checkbox' id='entryCheckbox' checked>";
+	  					if(inputs.childNodes[0] != undefined)
+	  					inputs.childNodes[0].checked = true;
 	  					appendMessage(false);
 	  				}
 	  				else
 	  				{
-	  					inputs.innerHTML = "<input type='checkbox' id='entryCheckbox'>";
+	  					if(inputs.childNodes[0] != undefined)
+	  					inputs.childNodes[0].checked = false;
 	  					appendMessage(false);
 	  				}
 			  		
@@ -121,11 +129,13 @@ if(!isset($_SESSION['myusername']) ){
 
 	  				if((cells[5].innerHTML == "0") || (cells[5].innerHTML == null))
 	  				{
-	  					cells[0].innerHTML = "<input type='checkbox' id='entryCheckbox' checked>";
+	  					if(cells[0].childNodes[0] != undefined)
+	  					cells[0].childNodes[0].checked = true;
 	  				}
 	  				else
 	  				{
-	  					cells[0].innerHTML = "<input type='checkbox' id='entryCheckbox'>";
+	  					if(cells[0].childNodes[0] != undefined)
+	  					cells[0].childNodes[0].checked = false;
 	  					
 	  				}
 			  		
@@ -142,11 +152,13 @@ if(!isset($_SESSION['myusername']) ){
 
 	  				if((cells[5].innerHTML != "0") && (cells[5].innerHTML != null))
 	  				{
-	  					cells[0].innerHTML = "<input type='checkbox' id='entryCheckbox' checked>";
+	  					if(cells[0].childNodes[0] != undefined)
+	  					cells[0].childNodes[0].checked = true;
 	  				}
 	  				else
 	  				{
-	  					cells[0].innerHTML = "<input type='checkbox' id='entryCheckbox'>";
+	  					if(cells[0].childNodes[0] != undefined)
+	  					cells[0].childNodes[0].checked = false;
 	  					
 	  				}
 			  		
@@ -254,8 +266,10 @@ if(!isset($_SESSION['myusername']) ){
 				}
 		}
 
-		function insnewRow()
+		function insnewRow(ele)
 		{
+			if(canAdd)
+			{
 			var x=document.getElementById('tabela').insertRow(document.getElementById('tabela').rows.length);
 			var a=x.insertCell(0);
 			var b=x.insertCell(1);
@@ -265,15 +279,20 @@ if(!isset($_SESSION['myusername']) ){
 			var f=x.insertCell(5);
 			var g=x.insertCell(6);
 			
-			a.innerHTML="<td><input type='checkbox' id='entryCheckbox' value='option1'></td>";
+			a.innerHTML="<td></td>";
 			b.innerHTML="<td><input type='text' id='txtNome' style='width:100px' placeholder='Nome...'></td>";
 			c.innerHTML="<td><input type='text' id='txtEmail' style='width:100px' placeholder='Email...'></td>";
 			d.innerHTML="<td><select id='comboSeccao'><option>Lobitos</option><option>Exploradores</option><option>Pioneiros</option><option>Caminheiros</option><option>Chefes</option></select></td>";
 			e.innerHTML="<td><input type='text' id='txtQuota' style='width:100px' placeholder='Quota...'></td>";
 			f.innerHTML="<td><input type='text' id='txtRecibo' style='width:100px' placeholder='Recibo...'></td>";
 			g.innerHTML="<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='teste1' onclick='fixontable(this);'><i class='icon-ok'></i></button><button class='btn btn-mini btn-danger' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
+			
+			canAdd = false;
+			document.getElementById('addbtn').className += " disabled";
+			}
 		}
 		
+
 
 		function getEmailText()
 		{
@@ -304,7 +323,9 @@ if(!isset($_SESSION['myusername']) ){
 			var query = "INSERT into "+temp+" (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
 				$.post("managedb.php", { sql_query : query},
 					function(data) {
-					window.location.reload();
+						canAdd = true;
+						document.getElementById("addbtn").className = document.getElementById("addbtn").className.replace( /(?:^|\s)disabled(?!\S)/g , '' )
+						window.location.reload();
 					});
 		}
 
@@ -334,7 +355,7 @@ if(!isset($_SESSION['myusername']) ){
 			var query = "UPDATE "+temp+" SET nome='"+a+"',email='"+b+"',seccao='"+c+"',quota='"+d+"',recibo='"+e+"' WHERE id='"+ident+"';";
 				$.post("managedb.php", { sql_query : query},
 					function(data) {
-					window.location.reload();
+					
 					});
 		}
 
@@ -393,18 +414,30 @@ if(!isset($_SESSION['myusername']) ){
 		function removeRow(ele)
 		{
 			var row = ele.parentNode.parentNode.parentNode;
+			var id_row = row.id;
+			
+			var table =document.getElementById('tabela');
+
+			if(id_row == "")
+			{
+				table.deleteRow(row.rowIndex);
+				
+				return;
+			}
+
+																	
 			var cells = row.getElementsByTagName('td');
 			var nome = cells[1].innerHTML;
 			var email = cells[2].innerHTML;
-			var table =document.getElementById('tabela');
+			
 			
 			table.deleteRow(row.rowIndex);
 			var temp = document.getElementById('tabela').getAttribute('name');
-			var query = "DELETE FROM "+temp+" WHERE nome = '"+nome+"' AND email = '"+email+"';";
+			var query = "DELETE FROM "+temp+" WHERE nome = '"+nome+"' AND email = '"+email+"' AND id='"+id_row+"';";
 				$.post("managedb.php", { sql_query : query},
 					function(data) {
-				
-					window.location.reload();
+					
+			
 					});
 			
 		}
@@ -428,7 +461,7 @@ if(!isset($_SESSION['myusername']) ){
 		{
 				var cur_row = ele.parentNode.parentNode.parentElement;
 				var cells_r = cur_row.cells;
-
+			
 				var nome = cells_r[1].innerHTML;
 				var email = cells_r[2].innerHTML;
 				var quota = cells_r[4].innerHTML;
@@ -439,14 +472,33 @@ if(!isset($_SESSION['myusername']) ){
 				cells_r[3].innerHTML="<td><select id='comboSeccao'><option>Lobitos</option><option>Exploradores</option><option>Pioneiros</option><option>Caminheiros</option><option>Chefes</option></select></td>";
 				cells_r[4].innerHTML="<td><input type='text' id='txtQuota' style='width:100px' placeholder='"+quota+"'></td>";
 				cells_r[5].innerHTML="<td><input type='text' id='txtRecibo' style='width:100px' placeholder='"+recibo+"'></td>";
-				cells_r[6].innerHTML="<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='teste1' onclick='updateontable(this);'><i class='icon-ok'></i></button><button class='btn btn-mini btn-danger' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
+				cells_r[6].innerHTML="<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='teste1' onclick='updateontable(this);'><i class='icon-ok'></i></button><button class='btn btn-mini btn-danger' onclick='removeRowfromedit(this,\""+nome+"\",\""+email+"\");'><i class='icon-remove'></i></button></div></td>";
 		
 		}
+
+		function removeRowfromedit(ele, nome,email)
+		{
+			var row = ele.parentNode.parentNode.parentNode;
+			var id_row = row.id;
+		
+			var table =document.getElementById('tabela');
+			
+			
+			table.deleteRow(row.rowIndex);
+			var temp = document.getElementById('tabela').getAttribute('name');
+			var query = "DELETE FROM "+temp+" WHERE nome = '"+nome+"' AND email = '"+email+"' AND id='"+id_row+"';";
+				$.post("managedb.php", { sql_query : query},
+					function(data) {
+					
+			
+					});
+			
+		}
+
 		window.onload = function()
-			{
-				var temp = document.getElementById('tabela').getAttribute('name');
-				document.getElementById('novoanobtn').parentNode.innerHTML = "<a id='novoanobtn' href='novoano.php?key="+temp+"'>Novo ano...</a>";
-			}
+		{
+			$('#addbtn').tooltip('hide');
+		}
 	</script>
 
 	<!--http://localhost-->

@@ -46,7 +46,15 @@
                 <input type="text" id='qCaminheiros' placeholder="Quota caminheiros">
                 <input type="text" id='qChefes' placeholder="Quota chefes">
                 <div  style='text-align:center'>
-                <span class="label label-info" >!Replica o ano selecionado!</span>
+                  
+                  <?php
+
+                  include('DBModel.php');
+                  LigaBD();
+                  getLabel();
+                  closedb();
+                  ?>
+                
               </div>
                 <br>
               
@@ -70,10 +78,8 @@
              var qChefes = document.getElementById('qChefes').value;
            
              
-             var link = new String(window.location);
-             var il = link.indexOf('=') + 1;
-             var prevAno = link.substring(il);
-            
+             var prevAno = document.getElementById('curanoLabel').getAttribute('name');
+            alert(prevAno);
              
               var query = "CREATE TABLE "+ano+" LIKE "+prevAno+";";
               $.post("managedb.php", { sql_query : query},
