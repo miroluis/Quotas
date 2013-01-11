@@ -59,10 +59,15 @@
       ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
 
 
+      
+      // adiconar exemplo a tabela
+
+       $q_6 = "INSERT INTO `exemplo` (`nome`, `email`, `seccao`,`quota`,`recibo`) VALUES
+      ('escuteiro-exemplo', 'exemplo@hostexemplo.com','Lobitos','0','0');";
 
       // Table structure for table `guarda_email`
 
-      $q_6 = "CREATE TABLE `guarda_email` (
+      $q_7 = "CREATE TABLE `guarda_email` (
         `id` bigint(20) NOT NULL AUTO_INCREMENT,
         `email` varchar(35) NOT NULL,
         `data` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -76,5 +81,6 @@
       mysql_query($q_4);
       mysql_query($q_5);
       mysql_query($q_6);
+      mysql_query($q_7);
   } 
 ?>
