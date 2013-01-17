@@ -13,6 +13,11 @@ if(!isset($_SESSION['myusername']) ){
 <html>
 
 <head>
+
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<script src="bootstrap/js/bootstrap-tooltip.js"></script>
+
 	<meta charset="UTF-8" />
 	<title>Quotas</title>
 
@@ -63,14 +68,44 @@ if(!isset($_SESSION['myusername']) ){
 	    	<div class="alert alert-success alert-block" id='alertaDiv' style='visibility:hidden'>
     		</div>
     		
-	    	<button class="btn btn-info btn-large" onclick='sendemail();' type="button">Send</button>
+	    	<button class="btn btn-info btn-large span2 offset5" onclick="sendemail();" type="button" >Send</button>
+			<br><br>
+	    	<a class="btn btn btn-mini span2 offset2" href="configuraEmail.php" type= "button">Configura email</a>
+
+			
+			<br><br>
+	    	<div class="alert alert-info alert-block" id='aEnviarDiv' style='visibility:hidden'>
+    		</div>
     	</form>
 
     	
     	
 	</div>
 
+<!--#include virtual="path to file/copyright.html" -->
+
+
+
+
 	<div id='copyrightDiv' style="text-align:center">
+		<button class="btn btn-error btn-mini" onclick='window.location.assign("logout.php");' type="button">Log out!</button>
+		<a class="btn btn-error btn-mini inline" href="newuser.html" type="button"><i class="icon-user"></i>Adicionar novo utilizador</a><br>
+		
+		<br>
+	</div>
+
+	<?php
+ require($DOCUMENT_ROOT . "copyright.html");
+ ?>
+	<!-- 
+	<div class='well container' id='copyrightDiv' style="text-align:center">
+		&copy; <a href = 'http://pt.linkedin.com/pub/francisco-couceiro/58/555/a02'> Francisco Couceiro</a><br>
+		&copy; <a href='http://www.miroelectronics.com/'>Miroelectronics</a><br>
+		<a href='http://site.onetag.pt/'>Powered by onetag</a>
+	</div>
+	 -->
+
+	 <!-- <div id='copyrightDiv' style="text-align:center">
 		<button class="btn btn-error btn-mini" onclick='window.location.assign("logout.php");' type="button">Log out!</button>
 		<a class="btn btn-error btn-mini inline" href="newuser.html" type="button"><i class="icon-user"></i>Adicionar novo utilizador</a><br>
 		
@@ -79,16 +114,13 @@ if(!isset($_SESSION['myusername']) ){
 		&copy; <a href='http://www.miroelectronics.com/'>Miroelectronics</a><br>
 		<a href='http://site.onetag.pt/'>Powered by onetag</a>
 	</div>
-	</div>
+	</div> -->
 
  	<br>
 	
 
 
 	
-	<script src="http://code.jquery.com/jquery-latest.js"></script>
-	<script src="bootstrap/js/bootstrap.min.js"></script>
-	<script src="bootstrap/js/bootstrap-tooltip.js"></script>
 
 	<script type="text/javascript">
 		var appendMsg = true;
@@ -178,12 +210,12 @@ if(!isset($_SESSION['myusername']) ){
 	  {
 	  	if(ele!='quota')
 	  	{
-	  	  	document.getElementById('alertaDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>O senhor 'nome-exemplo' pagou as quotas referentes ao ano 'ano-exemplo' e o recibo tem o numero: 'recibo-exemplo'.";
+	  	  	document.getElementById('alertaDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>Confirma-se que 'nome-exemplo' pagou as quotas referentes ao ano 'ano-exemplo', cujo o recibo é o numero 'recibo-exemplo'.";
 			  	
 	  	}
 	  	else
 	  	{
-	  		document.getElementById('alertaDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>O senhor 'nome-exemplo' deve uma quota no valor de 'quota-exemplo' (EUROS) referente ao ano 'ano-exemplo'.";
+	  		document.getElementById('alertaDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>'nome-exemplo' deve uma quota no valor de 'quota-exemplo' (EUROS) referente ao ano 'ano-exemplo'.";
 	  	}
 		appendMessage(true);
 	  }
@@ -202,10 +234,40 @@ if(!isset($_SESSION['myusername']) ){
 	  	appendMsg = ele;
 	  }
 
-		function sendemail()
-		{
-				
+	  function Aenviar(ele)
+	  {
+	  	document.getElementById('aEnviarDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>'A enviar email'.";
+		appendMessageAenviar(true);
+	  }
+	  function appendMessageAenviar(ele)
+	  {
+	  	if(!ele)
+	  	{
+	  		document.getElementById('aEnviarDiv').style.visibility = 'hidden'; 
+	  		
+	  	}
+	  	else
+	  	{
+	  		document.getElementById('aEnviarDiv').style.visibility = 'visible'; 
+	  	}
+	  	appendMsgAenviar = ele;
+	  }
 
+
+	  function acrescentaAenviar(ele)
+	  {
+	  	var antigo = document.getElementById('aEnviarDiv').innerHTML;
+	  	antigo = antigo.substr(antigo.indexOf("</a>")+4);
+	  	//alert(antigo);
+	  	antigo = antigo + " <br> "+ele;
+	  	document.getElementById('aEnviarDiv').innerHTML = "<a class='btn close' onclick='appendMessage(false);'>&times;</a>"+antigo;
+	  	//'A enviar email'.";
+	  }
+
+		function sendemail()
+		{			
+			Aenviar();
+			
 				var table=document.getElementById("tabela");
 				var tablerows = table.rows;
 				var cells;
@@ -224,11 +286,15 @@ if(!isset($_SESSION['myusername']) ){
 							var recibo = cells[5].innerHTML;
 
 							var text = getEmailText();
+							//alert(text);
 							var temp = document.getElementById('tabela').getAttribute('name');
+							var Tabela =  temp.substr(temp.indexOf("_")+1);
+							var db =  temp.substr(0, temp.indexOf("_"));
 							//send e-mail code block here
 							if(appendMsg)
 							{
 								var append = document.getElementById('alertaDiv').innerHTML;
+
 								 var il = append.indexOf('</a>') + 4;
              					var prev = append.substring(il);
 
@@ -236,9 +302,10 @@ if(!isset($_SESSION['myusername']) ){
              					{
              						prev = prev.replace("'nome-exemplo'",name);
              					}
+
              					if(prev.indexOf("'ano-exemplo'") != -1);
              					{
-             						prev = prev.replace("'ano-exemplo'",temp);
+             						prev = prev.replace("'ano-exemplo'",Tabela);
              					}
              					if(prev.indexOf("'quota-exemplo'") != -1);
              					{
@@ -250,11 +317,12 @@ if(!isset($_SESSION['myusername']) ){
              					}
 
 								text = text + "\n" + prev;
-							
+							//alert(text);
 							}
-							$.post("email_man.php", { to : email, subject : name, body : text},
+							$.post("email_man.php", { to : email, subject : name, body : text, db : db},
 							function(data) {
-					
+					//alert(data);
+					acrescentaAenviar(data);
 							
 							});
 
@@ -320,9 +388,18 @@ if(!isset($_SESSION['myusername']) ){
 			cells_row[5].innerHTML = e;
 			cells_row[6].innerHTML = "<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='editBtn' onclick='editRow(this);'><i class='icon-pencil'></i><button class='btn btn-mini btn-danger' onclick='removeRow(this);'><i class='icon-remove'></i></button></div></td>";
 			var temp = document.getElementById('tabela').getAttribute('name');
-			var query = "INSERT into "+temp+" (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"');";
+
+//echo "<script type='text/javascript'> 
+//alert(temp); 
+
+
+			var query = "INSERT into "+temp+" (nome,email,seccao,quota,recibo) values ('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"')";
+			//alert(query); 
 				$.post("managedb.php", { sql_query : query},
 					function(data) {
+						//$('.result').html(data);
+						//alert("alert-success");
+						//alert("Data Loaded: " + data);
 						canAdd = true;
 						document.getElementById("addbtn").className = document.getElementById("addbtn").className.replace( /(?:^|\s)disabled(?!\S)/g , '' )
 						window.location.reload();
@@ -353,6 +430,7 @@ if(!isset($_SESSION['myusername']) ){
 			var temp = document.getElementById('tabela').getAttribute('name');
 
 			var query = "UPDATE "+temp+" SET nome='"+a+"',email='"+b+"',seccao='"+c+"',quota='"+d+"',recibo='"+e+"' WHERE id='"+ident+"';";
+		//	alert(query);
 				$.post("managedb.php", { sql_query : query},
 					function(data) {
 					
@@ -433,21 +511,23 @@ if(!isset($_SESSION['myusername']) ){
 			
 			table.deleteRow(row.rowIndex);
 			var temp = document.getElementById('tabela').getAttribute('name');
-			var query = "DELETE FROM "+temp+" WHERE nome = '"+nome+"' AND email = '"+email+"' AND id='"+id_row+"';";
+			var query = "DELETE FROM "+temp+" WHERE nome = '"+nome+"' AND email = '"+email+"' AND id='"+id_row+"'";
+		//	alert(query);
 				$.post("managedb.php", { sql_query : query},
 					function(data) {
-					
+		//			 alert("Data Loaded: " + data);
+
 			
 					});
 			
 		}
-		
 
 		function changeYear(ele)
 		{
-			var new_ano = ele.innerHTML;
-			
-			var query = "UPDATE ano_activo SET ano='"+new_ano+"' WHERE id='0';";
+			var new_ano = ele;
+			var nomeBD = ele.substr(0,ele.indexOf("_"));
+			var tabela = ele.substr(ele.indexOf("_")+1);
+			var query = "UPDATE "+nomeBD+"_ano_activo SET ano='"+tabela+"' WHERE id='0';";
 			$.post("managedb.php", { sql_query : query},
 				function(data) {
 				
@@ -464,14 +544,42 @@ if(!isset($_SESSION['myusername']) ){
 			
 				var nome = cells_r[1].innerHTML;
 				var email = cells_r[2].innerHTML;
+
+				var seccao = cells_r[3].innerHTML;
+				var Slob ="";
+				var SExp ="";
+				var SPio ="";
+				var SCam ="";
+				var SChefe ="";
+
+
+				switch(seccao)
+				{
+				case 'Lobitos':
+				  Slob = "selected";
+				  break;
+				case 'Exploradores':
+				  SExp = "selected";
+				  break;
+				  case 'Pioneiros':
+				  SPio = "selected";
+				  break;
+				case 'Caminheiros':
+				  SCam = "selected";
+				  break;
+				case 'Chefes':
+				  SChefe = "selected";
+				  break;  
+				default:
+				}
+
 				var quota = cells_r[4].innerHTML;
 				var recibo = cells_r[5].innerHTML;
-
-				cells_r[1].innerHTML="<td><input type='text' id='txtNome' style='width:100px' placeholder='"+nome+"'></td>";
-				cells_r[2].innerHTML="<td><input type='text' id='txtEmail' style='width:100px' placeholder='"+email+"'></td>";
-				cells_r[3].innerHTML="<td><select id='comboSeccao'><option>Lobitos</option><option>Exploradores</option><option>Pioneiros</option><option>Caminheiros</option><option>Chefes</option></select></td>";
-				cells_r[4].innerHTML="<td><input type='text' id='txtQuota' style='width:100px' placeholder='"+quota+"'></td>";
-				cells_r[5].innerHTML="<td><input type='text' id='txtRecibo' style='width:100px' placeholder='"+recibo+"'></td>";
+				cells_r[1].innerHTML="<td><input type='text' id='txtNome' style='width:100px' value = '"+nome+"'></td>";
+				cells_r[2].innerHTML="<td><input type='text' id='txtEmail' style='width:100px' value='"+email+"'></td>";
+				cells_r[3].innerHTML="<td><select id='comboSeccao'><option "+Slob+">Lobitos</option><option "+SExp+">Exploradores</option><option "+SPio+">Pioneiros</option><option "+SCam+">Caminheiros</option><option "+SChefe+">Chefes</option></select></td>";
+				cells_r[4].innerHTML="<td><input type='text' id='txtQuota' style='width:100px' value='"+quota+"'></td>";
+				cells_r[5].innerHTML="<td><input type='text' id='txtRecibo' style='width:100px' value='"+recibo+"'></td>";
 				cells_r[6].innerHTML="<td><div class='btn-group'><button class='btn btn-mini btn-warning' id='teste1' onclick='updateontable(this);'><i class='icon-ok'></i></button><button class='btn btn-mini btn-danger' onclick='removeRowfromedit(this,\""+nome+"\",\""+email+"\");'><i class='icon-remove'></i></button></div></td>";
 		
 		}

@@ -79,9 +79,13 @@
            
              
              var prevAno = document.getElementById('curanoLabel').getAttribute('name');
-            alert(prevAno);
+            //alert(prevAno);
+
+              var nomeBD = prevAno.substr(0,prevAno.indexOf("_"));
+
+             // alert("o nome da base de dados é: "+nomeBD);
              
-              var query = "CREATE TABLE "+ano+" LIKE "+prevAno+";";
+              var query = "CREATE TABLE "+nomeBD+"_"+ano+" LIKE "+prevAno+";";
               $.post("managedb.php", { sql_query : query},
                 function(data){
 
@@ -90,20 +94,21 @@
                     alert("Coloque o ano neste formato: 2012_2013 (exemplo)");
                     return ;
                   }
-                  var query_a = "INSERT into "+ano+" SELECT * from "+prevAno+";";
+                  var query_a = "INSERT into "+nomeBD+"_"+ano+" SELECT * from "+prevAno+";";
                   $.post("managedb.php", { sql_query : query_a},
                     function(data) {
                       
-                           var query_a = "UPDATE "+ano+" SET `quota` = ''";
+                           var query_a = "UPDATE "+nomeBD+"_"+ano+" SET `quota` = ''";
                           $.post("managedb.php", { sql_query : query_a},
                     function(data) {
-                              var query_a = "UPDATE "+ano+" SET `recibo` = ''";
+                              var query_a = "UPDATE "+nomeBD+"_"+ano+" SET `recibo` = ''";
                              $.post("managedb.php", { sql_query : query_a},
                               function(data) {
-                               
-                                  $.post("atribui_quotas.php", { qLobitos : qLobitos, qExploradores:qExploradores,qPioneiros:qPioneiros,qCaminheiros:qCaminheiros,qChefes:qChefes,ano:ano},
+                                ano = nomeBD+"_"+ano;
+                              // alert(ano);
+                                  $.post("atribui_quotas.php", { qLobitos : qLobitos, qExploradores : qExploradores, qPioneiros : qPioneiros, qCaminheiros : qCaminheiros, qChefes : qChefes, ano : ano},
                               function(data) {
-                                 
+                                 //alert("sai");
                                   window.location.assign("index_quotas.php");
                       //
                             });
@@ -120,10 +125,8 @@
           }
     </script>
 
-    <div id='copyrightDiv' style="text-align:center">
-    &copy; <a>Francisco Couceiro</a><br>
-    &copy; <a href='http://www.miroelectronics.com/'>Miroelectronics</a><br>
-    <a href='http://site.onetag.pt/'>Powered by onetag</a>
-  </div>
+    <?php
+ require($DOCUMENT_ROOT . "copyright.html");
+ ?>
 </body>
 </html>

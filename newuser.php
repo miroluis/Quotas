@@ -14,13 +14,15 @@
 	ligaBD();
 
 	//get curdb
-	$cur_db_query = "SELECT * from users.curDB where id='0';";
+/*	$cur_db_query = "SELECT * from users.curDB where id='0';";
 	$rs_x = mysql_query($cur_db_query);
 	$cur_db_rs = mysql_fetch_array($rs_x);
 	$cur_db = $cur_db_rs[1];
-
+*/
+		$cur_db = ProcuraDBselect();
+	mysql_select_db("nfcportu_quotas") or die(mysql_error());
 	//add user
-	$query = "INSERT INTO users.users (username,password,email,database_name) values ('".$user."','".$password."','".$email."','".$cur_db."');";
+	$query = "INSERT INTO users (username,password,email,database_name) values ('".$user."','".$password."','".$email."','".$cur_db."');";
 	$rs_y = mysql_query($query);
 	
 	closedb();

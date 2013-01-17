@@ -12,19 +12,33 @@
   $to = $_POST['to'];
   $subject = $_POST['subject'];
   $body = $_POST['body'];
+
+  $db = $_POST['db'];
+
+  //echo $db."<br>";
  
- //Guarda e-mail
-  ligaBD();
-  $strSQL = "INSERT into guarda_email (email,body) values ('".$to."','".$body."');";
-  $rs = mysql_query($strSQL);
-  closedb();
 
  $host = "smtp.gmail.com";
  $port = "587";
  $username = "tesoureiro@cnepenela.com";
  $password = "VillaPalaio2013";
+
+ ligaBD();
+ $strSQL = "select * from ".$db."_configura_email";
+ $rs = mysql_query($strSQL);
+
+//mmmmecho $strSQL;
+
+ $row = mysql_fetch_array($rs);
+
+ $host = $row['smtp'];
  
- $headers = array ('From' => $from,
+ $username = $row['username'];
+ $password = $row['password'];
+
+ closedb();
+//$from,
+ $headers = array ('From' =>  $from,
    'To' => $to,
    'Subject' => $subject);
  $smtp = Mail::factory('smtp',
@@ -44,11 +58,16 @@ $headers = $mime->headers($headers);
  $mail = $smtp->send($to, $headers, $body);
  
  if (PEAR::isError($mail)) {
-   echo("<p>" . $mail->getMessage() . "</p>");
-  } else {
-    $strSQL = "INSERT into guarda_email (email,body) values ('".$to."','".$body."');";
-  $rs = mysql_query($strSQL);
-  if($rs == "1")
-   echo("<p>Message successfully sent!</p>");
+   //echo("<p>" . $mail->getMessage() . "</p>");
+    echo("Erro ao enviar email para: ".$to);
+  } 
+  else {
+   //Guarda e-mail
+    ligaBD();
+    $strSQL = "INSERT into ".$db."_guarda_email (email,body) values ('".$to."','".$body."');";
+    $rs = mysql_query($strSQL);
+    closedb();
+    if($rs == "1")
+      echo("Mensagem enviada com sucesso para: ".$to);
   }
  ?>

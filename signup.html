@@ -23,15 +23,12 @@
 				<input class="btn btn-success" onclick='checkForm();' value="Criar conta e database!"><br>
 				
 			</form>
-			<a class="btn btn-mini" href="index.html">Voltar</a>
+			<a class="btn btn-mini" href="index.php">Voltar</a>
 		</div>
 	</div>
 
-	<div id='copyrightDiv' style="text-align:center">
-		&copy; <a>Francisco Couceiro</a><br>
-		&copy; <a href='http://www.miroelectronics.com/'>Miroelectronics</a><br>
-		<a href='http://site.onetag.pt/'>Powered by onetag</a>
-	</div>
+
+
 
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
   	<script src="bootstrap/js/bootstrap.min.js"></script>
@@ -56,10 +53,10 @@
              	alert("Utilize um nome como: agrupamento_exemplo.");
              	return ;
              }
-
+//alert("vamos registar");
              $.post("signup.php", { novo_user_s : user_name, novo_user_pass_s:user_pass,novo_user_email_s:user_email,nova_db_s:db_name},
                               function(data) {
-                                 
+                               //  alert("Data Loaded: " + data);
                                   window.location.assign("index_quotas.php");
                       
                             });

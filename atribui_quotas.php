@@ -6,7 +6,7 @@
     //!session_is_registered(myusername)){
     header("location:main_login.php");
   }
-
+echo "<script type='text/javascript'> alert('ola'); </script>"; 
 	$qLobitos = $_POST['qLobitos'];
 	$qExploradores = $_POST['qExploradores'];
 	$qPioneiros = $_POST['qPioneiros'];
@@ -16,7 +16,7 @@
 
 	include('DBModel.php');
 	ligaBD();
-
+echo "<script type='text/javascript'> alert('". $ano."'); </script>"; 
 	$strSQL = "SELECT * FROM $ano;";
 	$rs = mysql_query($strSQL);
 

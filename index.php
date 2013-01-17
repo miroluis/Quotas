@@ -1,13 +1,16 @@
-
+<!DOCTYPE html>
 <html>
 
 <head>
 <title>Bem-vindo - Quotas</title>
+	<meta charset="UTF-8" />
 	 <link href="bootstrap/css/bootstrap.css" rel="stylesheet"> 
 	 <style>
 	 body {
 	 	padding-top: 30px;
          
+
+
       }
 
       body .test2{
@@ -18,27 +21,42 @@
 	 </style> 
 </head>
 <body>
+
+
+
 	<div class='well container' id='cointaner_geral' style="height:320px;width:500px;">
 		
-    		
+
 		<div class='container'>
 			<h2 > Bem-vindo ao gestor de quotas!</h2>
 			<div class="well test2" style="height:216px;width:460px;">
 				<button class='btn btn-success' onclick='window.location.assign("index_quotas.php");' type="button">Entrar</button>
 				<button class='btn btn-success inline' onclick='window.location.assign("signup.html");' type="button">Sign up</button>
-			
+			</div>
 		</div>
-		</div>
-			<div class="alert alert-error alert-block" id='alertaDiv' style='visibility:hidden'></div>
+		<div class="alert alert-error alert-block" id='alertaDiv' style='visibility:hidden'></div>
 	</div>
-	<br>
-	<div class='well container' id='copyrightDiv' style="text-align:center">
-		&copy; <a>Francisco Couceiro</a><br>
-		&copy; <a href='http://www.miroelectronics.com/'>Miroelectronics</a><br>
-		<a href='http://site.onetag.pt/'>Powered by onetag</a>
+	<div class="well container" style=" text-align: center;">
+		Esta aplicação permite a gestão de quotas de associados e respectivos recibos.
+		Com ela pode informar por email, quem tem quotas em atraso ou informar que as mesmas já estão pagas.
+		Pode entrar e exprimentar com user: demo pass: demo
+
+		Qualquer sugestão ou critica não exite em contactar pelo email de suporte
 	</div>
 
-	
+<?php
+ require($DOCUMENT_ROOT . "./copyright.html");
+ ?>
+<!-- <iframe id="extFrame" src="copyright.html"></iframe>
+
+<include src = "copyright.html" type = "text/html" />
+
+<object name="foo" type="text/html" data="copyright.html"></object>
+
+ -->
+
+	<br>
+
     <script src="http://code.jquery.com/jquery-latest.js"></script>
   	<script src="bootstrap/js/bootstrap.min.js"></script>
 
