@@ -1,9 +1,11 @@
 <?php
 
 $host="localhost"; // Host name 
+
 $username="nfcportu_php"; // Mysql username 
 $password="Php2012"; // Mysql password 
 $db_name="nfcportu_quotas"; // Database name 
+
 $tbl_name="users"; // Table name 
 
 // Connect to server and select databse.

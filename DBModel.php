@@ -11,8 +11,8 @@
 function LigaBD() {
 
 	$host = "localhost";
-	$username = "nfcportu_php";
-	$password = "Php2012";
+	$username = "root";
+	$password = "root";
 	mysql_connect($host, $username, $password) or die (mysql_error ());
 
 //não é necessário seleccionar a BD pois é sempre a mesma mudam é as tabelas
