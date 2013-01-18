@@ -8,8 +8,8 @@
 
 //echo "<script type='text/javascript'> alert('entrei managedb'); </script>"; 	
 	$host = "localhost";
-	$username = "nfcportu_php";
-	$password = "Php2012";
+	$username = "root";
+	$password = "root";
 	mysql_connect($host, $username, $password) or die (mysql_error ());
 
 	// Seleciona o Banco de Dados
