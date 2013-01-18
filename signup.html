@@ -1,6 +1,7 @@
 <html>
 
 <head>
+	<meta charset="UTF-8" />
 <title>Sign Up - Criar nova base de dados</title>
 	 <link href="bootstrap/css/bootstrap.css" rel="stylesheet">  
 	 <style>
@@ -53,14 +54,29 @@
              	alert("Utilize um nome como: agrupamento_exemplo.");
              	return ;
              }
-//alert("vamos registar");
-             $.post("signup.php", { novo_user_s : user_name, novo_user_pass_s:user_pass,novo_user_email_s:user_email,nova_db_s:db_name},
+
+//verifica se a BD já existe se sim dá aviso e não deixa cria-la
+
+			var sql_query = "select * FROM "+db_name+"_ano_activo";//
+		//	alert(query);
+				$.post("managedb.php", { sql_query : sql_query},
+					function(data) {
+						if(data != ""){
+							alert("Já existe escolha outro!");
+							return;
+					}
+  $.post("signup.php", { novo_user_s : user_name, novo_user_pass_s:user_pass,novo_user_email_s:user_email,nova_db_s:db_name},
                               function(data) {
                                //  alert("Data Loaded: " + data);
                                   window.location.assign("index_quotas.php");
                       
                             });
-    	}
+
+
+					});
+
+
+               	}
     </script>
 </body>
 </html>

@@ -1,10 +1,10 @@
 <?php
-	session_start();
-	//if($_SESSION["Login"]="No"){
-	if(!isset($_SESSION['myusername']) ){
-		//!session_is_registered(myusername)){
-		header("location:main_login.php");
-	}
+	// session_start();
+	// //if($_SESSION["Login"]="No"){
+	// if(!isset($_SESSION['myusername']) ){
+	// 	//!session_is_registered(myusername)){
+	// 	header("location:main_login.php");
+	// }
 
 //echo "<script type='text/javascript'> alert('entrei managedb'); </script>"; 	
 	$host = "localhost";
@@ -26,6 +26,8 @@
 	$sql_query=$_POST['sql_query']; 
 	$get=$_POST['get']; 
 
+	//Print $sql_query;
+
 //echo "<script type='text/javascript'> alert('". $sql_query."'); </script>"; 
 	//$sql_query = "insert into c_exemplo (nome,email,seccao,quota,recibo) values ('u','','Lobitos','','')";
 	
@@ -34,6 +36,7 @@
 
 
 	mysql_close();
+	//$row = mysql_fetch_array($result);
 	echo $result;//stripslashes($sql_query);
 	// $result;
 
